@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        layout="@layout/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <!-- Add ScrollView to enable scrolling -->
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+        <LinearLayout
+            android:id="@+id/employeeProfileForm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+
+            <!-- Adjusted ImageView height to 200dp -->
+            <ImageView
+                android:id="@+id/employeeImage"
+                android:layout_width="wrap_content"
+                android:layout_height="200dp"
+                android:contentDescription="Employee Image"
+                android:padding="8dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_person" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/employeeNameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/employeeName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Employee Name" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/employeePositionLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/employeePosition"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="10dp"
+                    android:hint="Employee Position" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/employeeEmailLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/employeeEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="10dp"
+                    android:hint="Employee Email" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/employeePhoneLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/employeePhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Employee Phone" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/annualSalaryLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/annualSalary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Annnual Salary" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/employmentDateLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:boxBackgroundColor="#faf5ff"
+                android:layout_marginVertical="5dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/employmentDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Employment Date" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/employeeTakenDaysLayout"
+                android:layout_width="match_parent"
+                app:boxBackgroundColor="#faf5ff"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/employeeTakenDays"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:clickable="false"
+                    android:hint="Employee Taken Days" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/employeeRemainingDaysLayout"
+                android:layout_width="match_parent"
+                app:boxBackgroundColor="#faf5ff"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="5dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/employeeRemainingDays"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:clickable="false"
+                    android:hint="Employee Remaining Days" />
+            </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/salaryIncreaseNotification"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:background="@android:color/holo_red_light"
+                android:padding="10dp"
+                android:textColor="@android:color/white"
+                android:visibility="gone"
+                android:text="Increase Salary by 5%" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/saveButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:text="Save"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/employeePhoneLayout" />
+        </LinearLayout>
+
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
