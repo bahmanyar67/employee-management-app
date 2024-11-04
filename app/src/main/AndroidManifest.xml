@@ -28,6 +28,9 @@
         <activity android:name=".EmployeeActivity" />
         <activity android:name=".HolidayRequestsActivity" />
 
+        <activity android:name=".MyAccountActivity" />
+        <activity android:name=".MyHolidayRequestsActivity" />
+        <activity android:name=".NewHolidayRequestActivity" />
 
     </application>
 
