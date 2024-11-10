@@ -29,9 +29,9 @@ This is an Android application that allows admins to manage employees in a compa
 2. Open the project in Android Studio.
 3. Run the project on an emulator or a physical device.
 4. Use below credentials to login as an admin:
-   - `Username: admin@domain.ltd`
-   - `Password: AdminPassword123!`
+   - `Username: shahla1@plymouth.com`
+   - `Password: Shahla123!`
 5. Use below credentials to login as an employee:
-   - `Username: alice_smith@email.ltd`
-   - `Password: RanDom1Pass!`
+   - `Username: vivek@plymouth.com`
+   - `Password: Vivek123!`
 6. Enjoy!

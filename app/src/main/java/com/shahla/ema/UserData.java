@@ -33,8 +33,8 @@ public class UserData {
 
 
         // Add admins
-        userList.add(new User(11, "admin@domain.ltd", "AdminPassword123!", "admin", "Shahla Bahmanyar", "CEO at EMA"));
-        userList.add(new User(12, "admin2@domain.ltd", "AdminPassword456!", "admin", "John Admin", "CTO at EMA"));
+        userList.add(new User(11, "shahla1@plymouth.com", "Shahla123!", "admin", "Shahla Bahmanyar", "CEO at EMA"));
+        userList.add(new User(12, "vivek@plymouth.com", "Vivek123!", "admin", "Vivek Singh", "CTO at EMA"));
 
     }
 
