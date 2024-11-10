@@ -10,8 +10,8 @@ public class UserData {
 
     private UserData() {
         userList = new ArrayList<>();
-        userList.add(new User(1, "alice_smith@email.ltd", "RanDom1Pass!",
-                "employee", "Alice Smith", "Software Engineer", 18000.00, LocalDate.of(2020, 1, 1), 5, 15));
+        userList.add(new User(1, "shahla@employee.shah", "Shahla123!",
+                "employee", "Shahla Bahmanyar", "Software Engineer", 18000.00, LocalDate.of(2020, 1, 1), 5, 15));
         userList.add(new User(2, "bob_jones@email.ltd", "RanDom2Pass!",
                 "employee", "Bob Jones", "Product Manager", 25000.00, LocalDate.of(2019, 5, 1), 10, 10));
         userList.add(new User(3, "carol_brown@email.ltd", "RanDom3Pass!",
@@ -33,8 +33,8 @@ public class UserData {
 
 
         // Add admins
-        userList.add(new User(11, "shahla1@plymouth.com", "Shahla123!", "admin", "Shahla Bahmanyar", "CEO at EMA"));
-        userList.add(new User(12, "vivek@plymouth.com", "Vivek123!", "admin", "Vivek Singh", "CTO at EMA"));
+        userList.add(new User(11, "shahla1@admin.shah", "Shahla123!", "admin", "Shahla Bahmanyar", "CEO at EMA"));
+        userList.add(new User(12, "vivek@admin.shah", "Vivek123!", "admin", "Vivek Singh", "CTO at EMA"));
 
     }
 
