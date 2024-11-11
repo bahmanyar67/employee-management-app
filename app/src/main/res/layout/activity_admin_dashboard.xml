@@ -16,6 +16,7 @@
         android:layout_marginHorizontal="24dp"
         android:textColor="@color/white"
         android:layout_marginTop="64dp"
+        app:icon="@drawable/users"
         android:backgroundTint="#a855f7"
         android:text="Manage Employees"
         app:layout_constraintEnd_toEndOf="parent"
@@ -37,6 +38,7 @@
         android:id="@+id/holidayRequestsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:icon="@drawable/brand_airbnb"
         android:text="Holiday Requests"
         android:backgroundTint="#a855f7"
         />

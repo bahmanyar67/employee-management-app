@@ -18,6 +18,7 @@
         android:layout_marginTop="64dp"
         android:backgroundTint="#a855f7"
         android:text="My Account"
+        app:icon="@drawable/user"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
@@ -35,6 +36,7 @@
         android:layout_height="wrap_content">
         <com.google.android.material.button.MaterialButton
             android:id="@+id/myHolidayRequestsButton"
+            app:icon="@drawable/brand_airbnb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="My Holiday Requests"
