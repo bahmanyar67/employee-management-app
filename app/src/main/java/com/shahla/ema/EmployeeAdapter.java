@@ -28,8 +28,8 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
     @Override
     public void onBindViewHolder(@NonNull EmployeeViewHolder holder, int position) {
         User employee = employeeList.get(position);
-        holder.employeeName.setText(employee.getName());
-        holder.employeePosition.setText(employee.getPosition());
+        holder.employeeName.setText(employee.getFirstName());
+        holder.employeePosition.setText(employee.getDepartment());
 
         holder.editButton.setOnClickListener(new View.OnClickListener() {
             @Override

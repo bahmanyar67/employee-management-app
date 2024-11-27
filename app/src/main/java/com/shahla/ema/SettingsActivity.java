@@ -1,10 +1,8 @@
 package com.shahla.ema;
 
 import android.os.Bundle;
-import android.widget.Switch;
 import android.widget.Toast;
-
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 
 public class SettingsActivity extends BaseActivity {
 
@@ -17,16 +15,24 @@ public class SettingsActivity extends BaseActivity {
         setupToolbar();
         setToolbarTitle("Settings");
 
-        Switch notificationSwitch = findViewById(R.id.holidayNotificationSwitch);
-        notificationSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                // show a toast message that the switch is enabled
-                Toast.makeText(SettingsActivity.this, "Notification is enabled", Toast.LENGTH_SHORT).show();
+        SwitchCompat holidayNotificationSwitch = findViewById(R.id.holidayNotificationSwitch);
+        SwitchCompat employeeNotificationSwitch = findViewById(R.id.employeeNotificationSwitch);
 
-            } else {
-                // show a toast message that the switch is disabled
-                Toast.makeText(SettingsActivity.this, "Notification is disabled", Toast.LENGTH_SHORT).show();
-            }
+
+        boolean holidayNotificationsEnabled = false;
+        boolean employeeNotificationsEnabled = false;
+        holidayNotificationSwitch.setChecked(holidayNotificationsEnabled);
+        employeeNotificationSwitch.setChecked(employeeNotificationsEnabled);
+
+        // Set up the switch listeners
+        holidayNotificationSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            String message = isChecked ? "Notification is enabled" : "Notification is disabled";
+            Toast.makeText(SettingsActivity.this, message, Toast.LENGTH_SHORT).show();
+        });
+
+        employeeNotificationSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            String message = isChecked ? "Notification is enabled" : "Notification is disabled";
+            Toast.makeText(SettingsActivity.this, message, Toast.LENGTH_SHORT).show();
         });
     }
 }

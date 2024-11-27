@@ -42,5 +42,13 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     implementation(libs.material)
 
+    // Password hashing
+    implementation (libs.jbcrypt)
+
+    // Room dependencies
+    implementation(libs.room.runtime)
+    annotationProcessor(libs.room.compiler)
+
+
 
 }

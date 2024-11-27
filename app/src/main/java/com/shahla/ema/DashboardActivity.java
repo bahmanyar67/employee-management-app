@@ -45,7 +45,7 @@ public class DashboardActivity extends BaseActivity {
         if (user.getUserType().equals("employee")) {
 
 
-            setToolbarTitle( user.getName() + " Dashboard");
+            setToolbarTitle( user.getFirstName() + " Dashboard");
 
             // get the user account
             myAccountButton = findViewById(R.id.myAccountButton);

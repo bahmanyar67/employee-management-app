@@ -24,25 +24,25 @@ public class MyAccountActivity  extends BaseActivity{
 
         // Display the employee details
         TextView employeeName = findViewById(R.id.userName);
-        employeeName.setText(user.getName());
+        employeeName.setText(user.getFirstName());
 
         TextView employeeEmail = findViewById(R.id.userEmail);
         employeeEmail.setText(user.getEmail());
 
         TextView employeePosition = findViewById(R.id.userPosition);
-        employeePosition.setText(user.getPosition());
+        employeePosition.setText(user.getDepartment());
 
         TextView employeeSalary = findViewById(R.id.annualSalary);
         employeeSalary.setText(String.valueOf(user.getSalary()));
 
         TextView employeeJoinDate = findViewById(R.id.employmentDate);
-        employeeJoinDate.setText(user.getEmploymentDate().toString());
+        employeeJoinDate.setText(user.getJoiningDate().toString());
 
-        TextView employeeTakenDays = findViewById(R.id.userTakenDays);
-        employeeTakenDays.setText(user.getTakenDays().toString());
+//        TextView employeeTakenDays = findViewById(R.id.userTakenDays);
+//        employeeTakenDays.setText(user.getTakenDays().toString());
 
-        TextView employeeRemainingDays = findViewById(R.id.userRemainingDays);
-        employeeRemainingDays.setText(user.getRemainingDays().toString());
+//        TextView employeeRemainingDays = findViewById(R.id.userRemainingDays);
+//        employeeRemainingDays.setText(user.getRemainingDays().toString());
 
 
         // Set up the save button to return to EmployeesActivity

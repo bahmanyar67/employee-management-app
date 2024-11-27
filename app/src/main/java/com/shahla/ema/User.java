@@ -3,122 +3,123 @@ package com.shahla.ema;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-public class User implements Serializable {
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
-    private Integer id;
+@Entity(tableName = "users")
+public class User implements Serializable {
+    @PrimaryKey(autoGenerate = true)
+    private int id;
+    @ColumnInfo(name = "first_name")
+    private String firstName;
+    @ColumnInfo(name = "last_name")
+    private String lastName;
     private String email;
     private String password;
+    private String department;
+    private Double salary;
+    @ColumnInfo(name = "user_type")
     private String userType;
-    private String name;
-    private String position;
-    private Double Salary;
-    private LocalDate employmentDate;
-    private Integer TakenDays;
-    private Integer RemainingDays;
+    @ColumnInfo(name = "joining_date")
+    private LocalDate joiningDate;
+    @ColumnInfo(name = "leaves")
+    private Integer leaves;
 
-    public User(Integer id, String email, String password, String userType, String name, String position, Double salary,
-                LocalDate employmentDate, Integer TakenDays, Integer RemainingDays) {
-        this.id = id;
+    // No-arg constructor required by Room
+    public User() {}
+
+    public User(String firstName, String lastName, String email, String password, String department, Double salary, String userType, LocalDate joiningDate, Integer leaves) {
+        this.id = 0;
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.email = email;
         this.password = password;
+        this.department = department;
+        this.salary = salary;
         this.userType = userType;
-        this.name = name;
-        this.position = position;
-        this.Salary = salary;
-        this.employmentDate = employmentDate;
-        this.TakenDays = TakenDays;
-        this.RemainingDays = RemainingDays;
-    }
-
-    public User(Integer id, String email, String password, String userType, String name, String position,
-                Double salary, LocalDate employmentDate) {
-        this(id, email, password, userType, name, position, salary, employmentDate, 0, 20);
-    }
-
-    // Constructor with default values for takenDays and remainingDays
-    public User(Integer id, String email, String password, String userType, String name, String position) {
-        this(id, email, password, userType, name, position, 0.00, LocalDate.now(), 0, 20);
+        this.joiningDate = joiningDate;
+        this.leaves = leaves;
     }
 
 
-    public Integer getId() {
+    public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public String getUserType() {
-        return userType;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getPosition() {
-        return position;
-    }
-
-    public Double getSalary() {
-        return Salary;
-    }
-
-    public LocalDate getEmploymentDate() {
-        return employmentDate;
-    }
-
-    public Integer getTakenDays() {
-        return TakenDays;
-    }
-
-    public Integer getRemainingDays() {
-        return RemainingDays;
-    }
-
-    public void setSalary(Double salary) {
-        this.Salary = salary;
-    }
-
-    public void setTakenDays(Integer takenDays) {
-        this.TakenDays = takenDays;
-    }
-
-    public void setRemainingDays(Integer remainingDays) {
-        this.RemainingDays = remainingDays;
-    }
-
-    public void setEmploymentDate(LocalDate employmentDate) {
-        this.employmentDate = employmentDate;
-    }
-
-    public void setPosition(String position) {
-        this.position = position;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
 
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public Double getSalary() {
+        return salary;
+    }
+
+    public void setSalary(Double salary) {
+        this.salary = salary;
+    }
+
+    public String getUserType() {
+        return userType;
+    }
+
     public void setUserType(String userType) {
         this.userType = userType;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public LocalDate getJoiningDate() {
+        return joiningDate;
     }
 
+    public void setJoiningDate(LocalDate joiningDate) {
+        this.joiningDate = joiningDate;
+    }
+
+    public Integer getLeaves() {
+        return leaves;
+    }
+
+    public void setLeaves(Integer leaves) {
+        this.leaves = leaves;
+    }
 }

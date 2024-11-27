@@ -12,6 +12,9 @@ import androidx.appcompat.widget.Toolbar;
 
 public class BaseActivity extends AppCompatActivity {
 
+    protected AppDatabase db;
+    protected UserDao userDao;
+
     protected void setupToolbar() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

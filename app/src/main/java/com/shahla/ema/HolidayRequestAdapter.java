@@ -33,7 +33,7 @@ public class HolidayRequestAdapter extends RecyclerView.Adapter<HolidayRequestAd
     @Override
     public void onBindViewHolder(@NonNull HolidayRequestViewHolder holder, @SuppressLint("RecyclerView") int position) {
         HolidayRequest request = holidayRequestList.get(position);
-        holder.employeeName.setText(request.getEmployee().getName());
+        holder.employeeName.setText(request.getEmployee().getFirstName());
 
         // date format should be like "Jan 1, 2025"
         holder.fromDate.setText(request.getFromDate().format(DateTimeFormatter.ofPattern("MMM d, yyyy")));

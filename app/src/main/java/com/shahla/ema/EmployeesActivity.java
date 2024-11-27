@@ -6,15 +6,24 @@ import android.view.View;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.Room;
 
 import com.google.android.material.button.MaterialButton;
 
 public class EmployeesActivity extends BaseActivity {
 
+    private AppDatabase db;
+    private UserDao userDao;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_employees);
+
+
+        // Initialize the Room database
+        db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "ema-database").allowMainThreadQueries().build();
+        userDao = db.userDao();
 
 
         // Set up the toolbar
@@ -25,7 +34,7 @@ public class EmployeesActivity extends BaseActivity {
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        EmployeeAdapter adapter = new EmployeeAdapter(UserData.getInstance().getEmployees());
+        EmployeeAdapter adapter = new EmployeeAdapter(userDao.getEmployees());
         recyclerView.setAdapter(adapter);
 
 

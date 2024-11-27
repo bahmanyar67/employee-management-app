@@ -22,7 +22,7 @@ public class EmployeeActivity extends BaseActivity {
 
         // Set up the toolbar
         setupToolbar();
-        setToolbarTitle("Employee Profile");
+        setToolbarTitle(employee != null ?  "Employee Profile" : "New Employee");
 
         // Get the Employee object from the intent
         employee = (User) getIntent().getSerializableExtra("employee");
@@ -49,29 +49,29 @@ public class EmployeeActivity extends BaseActivity {
 
     private void populateEmployeeDetails() {
         TextView employeeName = findViewById(R.id.employeeName);
-        employeeName.setText(employee.getName());
+        employeeName.setText(employee.getFirstName());
 
         TextView employeeEmail = findViewById(R.id.employeeEmail);
         employeeEmail.setText(employee.getEmail());
 
         TextView employeePosition = findViewById(R.id.employeePosition);
-        employeePosition.setText(employee.getPosition());
+        employeePosition.setText(employee.getDepartment());
 
         TextView employeeSalary = findViewById(R.id.annualSalary);
         employeeSalary.setText(String.valueOf(employee.getSalary()));
 
         TextView employeeJoinDate = findViewById(R.id.employmentDate);
-        employeeJoinDate.setText(employee.getEmploymentDate().toString());
+        employeeJoinDate.setText(employee.getJoiningDate().toString());
 
-        TextView employeeTakenDays = findViewById(R.id.employeeTakenDays);
-        employeeTakenDays.setText(employee.getTakenDays().toString());
+//        TextView employeeTakenDays = findViewById(R.id.employeeTakenDays);
+//        employeeTakenDays.setText(employee.getTakenDays().toString());
 
-        TextView employeeRemainingDays = findViewById(R.id.employeeRemainingDays);
-        employeeRemainingDays.setText(employee.getRemainingDays().toString());
+//        TextView employeeRemainingDays = findViewById(R.id.employeeRemainingDays);
+//        employeeRemainingDays.setText(employee.getRemainingDays().toString());
 
         // Calculate the number of years passed since the employment date
         LocalDate currentDate = LocalDate.now();
-        LocalDate employmentDate = employee.getEmploymentDate();
+        LocalDate employmentDate = employee.getJoiningDate();
         Period period = Period.between(employmentDate, currentDate);
         int yearsPassed = period.getYears();
 
