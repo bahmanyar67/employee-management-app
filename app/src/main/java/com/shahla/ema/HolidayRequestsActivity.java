@@ -3,7 +3,6 @@ package com.shahla.ema;
 import android.os.Bundle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -16,9 +15,8 @@ public class HolidayRequestsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_holiday_requests);
 
-        // Initialize the Room database
-        db = AppDatabase.getDatabase(this);
-        userDao = db.userDao();
+
+        userDao = new UserDao(this);
 
         // Set up the toolbar
         setupToolbar();

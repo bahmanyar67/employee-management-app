@@ -45,10 +45,6 @@ dependencies {
     // Password hashing
     implementation (libs.jbcrypt)
 
-    // Room dependencies
-    implementation(libs.room.runtime)
-    annotationProcessor(libs.room.compiler)
-
 
 
 }

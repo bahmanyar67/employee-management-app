@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.concurrent.ExecutorService;
@@ -21,8 +22,6 @@ public class LoginActivity extends AppCompatActivity {
     private EditText passwordEditText;
     private Button loginButton;
     private TextView registerButton;
-
-    private AppDatabase db;
     private UserDao userDao;
 
     // ExecutorService for running background tasks
@@ -39,9 +38,8 @@ public class LoginActivity extends AppCompatActivity {
         passwordEditText = findViewById(R.id.passwordEditText);
         loginButton = findViewById(R.id.loginButton);
 
-        // Initialize the Room database
-        db = AppDatabase.getDatabase(this);
-        userDao = db.userDao();
+
+        userDao = new UserDao(this);
 
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,6 +66,14 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (userDao != null) {
+            userDao.close();
+        }
     }
 
     private void authenticateUser(String email, String password) {

@@ -12,7 +12,7 @@ import androidx.appcompat.widget.Toolbar;
 
 public class BaseActivity extends AppCompatActivity {
 
-    protected AppDatabase db;
+
     protected UserDao userDao;
 
     protected void setupToolbar() {

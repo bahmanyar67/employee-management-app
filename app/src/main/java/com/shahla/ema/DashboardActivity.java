@@ -53,7 +53,7 @@ public class DashboardActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(DashboardActivity.this, MyAccountActivity.class);
-                    intent.putExtra("user", user);
+                    intent.putExtra("user", user.getId());
                     startActivity(intent);
                 }
             });
@@ -63,7 +63,7 @@ public class DashboardActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(DashboardActivity.this, MyHolidayRequestsActivity.class);
-                    intent.putExtra("user", user);
+                    intent.putExtra("user", user.getId());
                     startActivity(intent);
                 }
             });
@@ -91,8 +91,6 @@ public class DashboardActivity extends BaseActivity {
             });
 
         }
-
-
     }
 
     @Override

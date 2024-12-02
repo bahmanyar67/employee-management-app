@@ -3,27 +3,24 @@ package com.shahla.ema;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
 
-@Entity(tableName = "users")
+
 public class User implements Serializable {
-    @PrimaryKey(autoGenerate = true)
+
     private int id;
-    @ColumnInfo(name = "first_name")
+
     private String firstName;
-    @ColumnInfo(name = "last_name")
+
     private String lastName;
     private String email;
     private String password;
     private String department;
     private Double salary;
-    @ColumnInfo(name = "user_type")
+
     private String userType;
-    @ColumnInfo(name = "joining_date")
+
     private LocalDate joiningDate;
-    @ColumnInfo(name = "leaves")
+
     private Integer leaves;
 
     // No-arg constructor required by Room

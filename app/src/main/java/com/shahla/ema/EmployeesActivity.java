@@ -6,13 +6,11 @@ import android.view.View;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.Room;
 
 import com.google.android.material.button.MaterialButton;
 
 public class EmployeesActivity extends BaseActivity {
 
-    private AppDatabase db;
     private UserDao userDao;
 
     @Override
@@ -21,9 +19,7 @@ public class EmployeesActivity extends BaseActivity {
         setContentView(R.layout.activity_employees);
 
 
-        // Initialize the Room database
-        db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "ema-database").allowMainThreadQueries().build();
-        userDao = db.userDao();
+        userDao = new UserDao(this);
 
 
         // Set up the toolbar
