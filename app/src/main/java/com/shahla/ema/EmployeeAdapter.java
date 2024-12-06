@@ -12,9 +12,9 @@ import java.util.List;
 
 public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.EmployeeViewHolder> {
 
-    private List<User> employeeList;
+    private List<Employee> employeeList;
 
-    public EmployeeAdapter(List<User> employeeList) {
+    public EmployeeAdapter(List<Employee> employeeList) {
         this.employeeList = employeeList;
     }
 
@@ -27,7 +27,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
 
     @Override
     public void onBindViewHolder(@NonNull EmployeeViewHolder holder, int position) {
-        User employee = employeeList.get(position);
+        Employee employee = employeeList.get(position);
         holder.employeeName.setText(employee.getFirstName());
         holder.employeePosition.setText(employee.getDepartment());
 

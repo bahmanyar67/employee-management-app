@@ -26,7 +26,7 @@ public class HolidayRequestsActivity extends BaseActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         List<HolidayRequest> holidayRequestList = new ArrayList<>();
-        List<User> employeeList = userDao.getEmployees();
+        List<Employee> employeeList = userDao.getEmployees();
 
         String[] notes = {"Sick leave", "Vacation", "Family reasons", "Personal reasons"};
 

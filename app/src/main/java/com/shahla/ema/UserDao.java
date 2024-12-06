@@ -60,8 +60,8 @@ public class UserDao {
         db.delete("users", "id = ?", new String[]{String.valueOf(user.getId())});
     }
 
-    public List<User> getEmployees() {
-        List<User> employees = new ArrayList<>();
+    public List<Employee> getEmployees() {
+        List<Employee> employees = new ArrayList<>();
         Cursor cursor = db.query(
                 "users",
                 null,
@@ -72,7 +72,7 @@ public class UserDao {
         );
         if (cursor.moveToFirst()) {
             do {
-                User user = new User();
+                Employee user = new Employee();
                 user.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
                 user.setFirstName(cursor.getString(cursor.getColumnIndexOrThrow("first_name")));
                 user.setLastName(cursor.getString(cursor.getColumnIndexOrThrow("last_name")));
@@ -130,8 +130,7 @@ public class UserDao {
                 null,
                 null
         );
-        if (cursor != null) {
-            cursor.moveToFirst();
+        if (cursor != null && cursor.moveToFirst()) {
             User user = new User();
             user.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
             user.setFirstName(cursor.getString(cursor.getColumnIndexOrThrow("first_name")));
@@ -151,6 +150,9 @@ public class UserDao {
             cursor.close();
             return user;
         } else {
+            if (cursor != null) {
+                cursor.close();
+            }
             return null;
         }
     }
