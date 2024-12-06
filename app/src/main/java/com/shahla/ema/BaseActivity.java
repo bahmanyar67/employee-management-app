@@ -45,6 +45,12 @@ public class BaseActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
     protected void setToolbarTitle(String title) {
         TextView toolbarTitle = findViewById(R.id.toolbarTitle);
         if (getSupportActionBar() != null) {

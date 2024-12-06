@@ -39,6 +39,7 @@ public class EmployeeActivity extends BaseActivity {
             public void onClick(View v) {
                 if (validate()) {
                     Intent intent = new Intent(EmployeeActivity.this, EmployeesActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                     finish();
                 }
