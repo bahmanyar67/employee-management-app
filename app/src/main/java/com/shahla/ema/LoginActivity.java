@@ -38,7 +38,6 @@ public class LoginActivity extends AppCompatActivity {
         passwordEditText = findViewById(R.id.passwordEditText);
         loginButton = findViewById(R.id.loginButton);
 
-
         userDao = new UserDao(this);
 
         loginButton.setOnClickListener(new View.OnClickListener() {

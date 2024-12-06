@@ -2,30 +2,38 @@ package com.shahla.ema;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
+import com.shahla.ema.databinding.ActivityEmployeeBinding;
 
 import java.time.LocalDate;
 import java.time.Period;
 
 public class EmployeeActivity extends BaseActivity {
 
-    private User employee;
+    private ActivityEmployeeBinding binding;
+
+    private Employee employee;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_employee);
 
+        binding = ActivityEmployeeBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+
         // Set up the toolbar
         setupToolbar();
-        setToolbarTitle(employee != null ?  "Employee Profile" : "New Employee");
+        setToolbarTitle(employee != null ? "Employee Profile" : "New Employee");
 
         // Get the Employee object from the intent
-        employee = (User) getIntent().getSerializableExtra("employee");
+        employee = (Employee) getIntent().getSerializableExtra("employee");
 
         // Display the employee details if editing
         if (employee != null) {
@@ -38,89 +46,161 @@ public class EmployeeActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (validate()) {
+                    if (employee != null) {
+                        updateEmployee();
+                    } else {
+                        saveEmployee();
+                    }
                     Intent intent = new Intent(EmployeeActivity.this, EmployeesActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                     finish();
                 }
-
             }
         });
     }
 
+    private void setText(TextView view, String text) {
+        if (text != null) {
+            view.setText(text);
+        }
+    }
+
     private void populateEmployeeDetails() {
-        TextView employeeName = findViewById(R.id.employeeName);
-        employeeName.setText(employee.getFirstName());
+        if (employee == null) return;
 
-        TextView employeeEmail = findViewById(R.id.employeeEmail);
-        employeeEmail.setText(employee.getEmail());
-
-        TextView employeePosition = findViewById(R.id.employeePosition);
-        employeePosition.setText(employee.getDepartment());
-
-        TextView employeeSalary = findViewById(R.id.annualSalary);
-        employeeSalary.setText(String.valueOf(employee.getSalary()));
-
-        TextView employeeJoinDate = findViewById(R.id.employmentDate);
-        employeeJoinDate.setText(employee.getJoiningDate().toString());
-
-//        TextView employeeTakenDays = findViewById(R.id.employeeTakenDays);
-//        employeeTakenDays.setText(employee.getTakenDays().toString());
-
-//        TextView employeeRemainingDays = findViewById(R.id.employeeRemainingDays);
-//        employeeRemainingDays.setText(employee.getRemainingDays().toString());
+        setText(binding.employeeFirstName, employee.getFirstName());
+        setText(binding.employeeLastName, employee.getLastName());
+        setText(binding.employeeEmail, employee.getEmail());
+        setText(binding.employeeDepartment, employee.getDepartment());
+        setText(binding.annualSalary, String.valueOf(employee.getSalary()));
+        setText(binding.employmentDate, employee.getJoiningDate().toString());
+        setText(binding.employeeAllowedLeaves, employee.getLeaves().toString());
 
         // Calculate the number of years passed since the employment date
+        showSalaryIncreaseNotification();
+    }
+
+    private void showSalaryIncreaseNotification() {
         LocalDate currentDate = LocalDate.now();
         LocalDate employmentDate = employee.getJoiningDate();
         Period period = Period.between(employmentDate, currentDate);
         int yearsPassed = period.getYears();
 
-        // Show the notification if at least one year has passed
-        TextView salaryIncreaseNotification = findViewById(R.id.salaryIncreaseNotification);
         if (yearsPassed >= 1) {
             int percentageIncrease = yearsPassed * 5;
-            salaryIncreaseNotification.setText("Increase Salary by " + percentageIncrease + "%");
-            salaryIncreaseNotification.setVisibility(View.VISIBLE);
+            binding.salaryIncreaseNotification.setText(
+                    String.format("Increase Salary by %d%%", percentageIncrease)
+            );
+            binding.salaryIncreaseNotification.setVisibility(View.VISIBLE);
+        } else {
+            binding.salaryIncreaseNotification.setVisibility(View.GONE);
         }
     }
 
     private boolean validate() {
-        // Get the input values
-        String name = ((TextView) findViewById(R.id.employeeName)).getText().toString();
-        String email = ((TextView) findViewById(R.id.employeeEmail)).getText().toString();
-        String position = ((TextView) findViewById(R.id.employeePosition)).getText().toString();
 
-        TextView salaryTextView = findViewById(R.id.annualSalary);
-        String salaryText = salaryTextView.getText().toString();
+        boolean isValid = true;
 
-        double salary;
-        try {
-            salary = Double.parseDouble(salaryText);
-        } catch (NumberFormatException e) {
-            Toast.makeText(this, "Invalid salary input", Toast.LENGTH_SHORT).show();
-            return false; // or handle the error appropriately
+        isValid &= validateField(binding.employeeFirstName, "First Name is required");
+        isValid &= validateField(binding.employeeLastName, "Last Name is required");
+        isValid &= validateField(binding.employeeEmail, "Email is required");
+        if (employee == null) {
+            isValid &= validateField(binding.employeePassword, "Password is required");
+        }
+        isValid &= validateField(binding.employeeDepartment, "Department is required");
+        isValid &= validateField(binding.annualSalary, "Salary is required");
+        isValid &= validateField(binding.employmentDate, "Joining Date is required");
+        isValid &= validateField(binding.employeeAllowedLeaves, "Allowed Leaves is required");
+
+        if (!Utilities.isValidEmail(binding.employeeEmail.getText().toString())) {
+            binding.employeeEmail.setError("Invalid Email Address");
+            isValid = false;
         }
 
-
-        TextView employmentDateTextView = findViewById(R.id.employmentDate);
-
-        LocalDate employmentDate;
-        try {
-            employmentDate = LocalDate.parse(employmentDateTextView.getText().toString());
-        } catch (Exception e) {
-            Toast.makeText(this, "Invalid employment date input", Toast.LENGTH_SHORT).show();
-            return false; // or handle the error appropriately
+        if (!isEmailUnique(binding.employeeEmail.getText().toString())) {
+            binding.employeeEmail.setError("Email already exists");
+            isValid = false;
         }
 
-        // check the input values
-        if (name.isEmpty() || email.isEmpty() || position.isEmpty() || salary == 0 || employmentDate == null) {
-            Toast.makeText(this, "Please fill in all the fields", Toast.LENGTH_SHORT).show();
-            return false;
+        if (employee == null || !binding.employeePassword.getText().toString().isEmpty()) {
+            if (!Utilities.isValidPassword(binding.employeePassword.getText().toString())) {
+                binding.employeePassword.setError("Password is not secure");
+                isValid = false;
+            }
         }
 
-        return true;
+        if (!Utilities.isValidDate(binding.employmentDate.getText().toString())) {
+            binding.employmentDate.setError("Invalid Date");
+            isValid = false;
+        }
+
+        return isValid;
     }
 
+    // store the employee details in the database
+    private void saveEmployee() {
+        String firstName = binding.employeeFirstName.getText().toString();
+        String lastName = binding.employeeLastName.getText().toString();
+        String email = binding.employeeEmail.getText().toString();
+        String password = binding.employeePassword.getText().toString();
+        String encryptedPassword = Utilities.hashPassword(password);
+        String department = binding.employeeDepartment.getText().toString();
+        double salary = Double.parseDouble(binding.annualSalary.getText().toString());
+        LocalDate joiningDate = LocalDate.parse(binding.employmentDate.getText().toString());
+        int leaves = Integer.parseInt(binding.employeeAllowedLeaves.getText().toString());
+
+        // TODO: check if the employee is already in the database (Email should be unique)
+
+        User employee = new Employee(firstName, lastName, email, encryptedPassword, department, salary, joiningDate, leaves);
+        UserDao userDao = new UserDao(this);
+        userDao.insert(employee);
+        userDao.close();
+    }
+
+    private void updateEmployee() {
+        String firstName = binding.employeeFirstName.getText().toString();
+        String lastName = binding.employeeLastName.getText().toString();
+        String email = binding.employeeEmail.getText().toString();
+        String department = binding.employeeDepartment.getText().toString();
+        double salary = Double.parseDouble(binding.annualSalary.getText().toString());
+        LocalDate joiningDate = LocalDate.parse(binding.employmentDate.getText().toString());
+        int leaves = Integer.parseInt(binding.employeeAllowedLeaves.getText().toString());
+
+        // update if password is not empty
+        if (!binding.employeePassword.getText().toString().isEmpty()) {
+            String password = binding.employeePassword.getText().toString();
+            employee.setPassword(Utilities.hashPassword(password));
+        }
+
+        employee.setFirstName(firstName);
+        employee.setLastName(lastName);
+        employee.setEmail(email);
+        employee.setDepartment(department);
+        employee.setSalary(salary);
+        employee.setJoiningDate(joiningDate);
+        employee.setLeaves(leaves);
+
+        UserDao userDao = new UserDao(this);
+        userDao.update(employee);
+        userDao.close();
+    }
+
+    private boolean isEmailUnique(String email) {
+        UserDao userDao = new UserDao(this);
+        User user = userDao.findUserByEmail(email);
+        userDao.close();
+        return user == null || (employee != null && user.getId() == employee.getId());
+    }
+
+
+    private boolean validateField(TextInputEditText field, String errorMessage) {
+        String text = field.getText().toString().trim();
+        if (text.isEmpty()) {
+            field.setError(errorMessage);
+            return false;
+        }
+        return true;
+    }
 
 }
