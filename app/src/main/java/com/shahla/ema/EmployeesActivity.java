@@ -2,7 +2,10 @@ package com.shahla.ema;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.EditText;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,6 +15,7 @@ import com.google.android.material.button.MaterialButton;
 public class EmployeesActivity extends BaseActivity {
 
     private UserDao userDao;
+    private EmployeeAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,20 +30,33 @@ public class EmployeesActivity extends BaseActivity {
         setupToolbar();
         setToolbarTitle("Employees List");
 
-
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        EmployeeAdapter adapter = new EmployeeAdapter(userDao.getEmployees());
+        adapter = new EmployeeAdapter(userDao.getEmployees());
         recyclerView.setAdapter(adapter);
 
-
         MaterialButton addButton = findViewById(R.id.addNewEmployeeButton);
-        addButton.setOnClickListener(new View.OnClickListener() {
+        addButton.setOnClickListener(v -> {
+            Intent intent = new Intent(EmployeesActivity.this, EmployeeActivity.class);
+            startActivity(intent);
+        });
+
+        EditText searchEditText = findViewById(R.id.searchEditText);
+        searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(EmployeesActivity.this, EmployeeActivity.class);
-                startActivity(intent);
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // No action needed
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                adapter.filter(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // No action needed
             }
         });
 

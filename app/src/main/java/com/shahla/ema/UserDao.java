@@ -56,8 +56,8 @@ public class UserDao {
         db.update("users", values, "id = ?", new String[]{String.valueOf(user.getId())});
     }
 
-    public void delete(User user) {
-        db.delete("users", "id = ?", new String[]{String.valueOf(user.getId())});
+    public void delete(Employee employee) {
+        db.delete("users", "id = ?", new String[]{String.valueOf(employee.getId())});
     }
 
     public List<Employee> getEmployees() {
