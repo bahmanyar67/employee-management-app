@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.shahla.ema.databinding.ActivityEmployeeBinding;
 
@@ -51,13 +52,16 @@ public class EmployeeActivity extends BaseActivity {
                     } else {
                         saveEmployee();
                     }
-                    Intent intent = new Intent(EmployeeActivity.this, EmployeesActivity.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
-                    finish();
                 }
             }
         });
+    }
+
+    private void goBackToEmployeesActivity() {
+        Intent intent = new Intent(EmployeeActivity.this, EmployeesActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
 
     private void setText(TextView view, String text) {
@@ -152,10 +156,18 @@ public class EmployeeActivity extends BaseActivity {
 
         // TODO: check if the employee is already in the database (Email should be unique)
 
-        User employee = new Employee(firstName, lastName, email, encryptedPassword, department, salary, joiningDate, leaves);
-        UserDao userDao = new UserDao(this);
-        userDao.insert(employee);
-        userDao.close();
+        Employee employee = new Employee(firstName, lastName, email, encryptedPassword, department, salary, joiningDate, leaves);
+
+        ApiService apiService = new ApiService(this);
+        apiService.addEmployee(employee, response -> {
+            Log.d("API", "Employee added successfully");
+            UserDao userDao = new UserDao(this);
+            userDao.insert(employee);
+            userDao.close();
+            goBackToEmployeesActivity();
+        }, error -> {
+            Snackbar.make(binding.getRoot(), "Error: " + error.getMessage(), Snackbar.LENGTH_LONG).show();
+        });
     }
 
     private void updateEmployee() {
@@ -181,9 +193,17 @@ public class EmployeeActivity extends BaseActivity {
         employee.setJoiningDate(joiningDate);
         employee.setLeaves(leaves);
 
-        UserDao userDao = new UserDao(this);
-        userDao.update(employee);
-        userDao.close();
+
+        ApiService apiService = new ApiService(this);
+        apiService.updateEmployee(employee.getId(), employee, response -> {
+            Log.d("API", "Employee updated successfully");
+            UserDao userDao = new UserDao(this);
+            userDao.update(employee);
+            userDao.close();
+            goBackToEmployeesActivity();
+        }, error -> {
+            Snackbar.make(binding.getRoot(), "Error: " + error.getMessage(), Snackbar.LENGTH_LONG).show();
+        });
     }
 
     private boolean isEmailUnique(String email) {

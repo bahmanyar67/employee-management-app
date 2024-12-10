@@ -1,6 +1,7 @@
 package com.shahla.ema;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,11 +46,23 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         });
 
         holder.deleteButton.setOnClickListener(v -> {
-            UserDao userDao = new UserDao(v.getContext());
-            userDao.delete(employee);
-            userDao.close();
-            employeeList.remove(employee);
-            filter(""); // Refresh the filtered list
+
+            ApiService apiService = new ApiService(v.getContext());
+
+            apiService.deleteEmployee(employee.getId(), response -> {
+                Log.d("API", "Employee deleted successfully");
+                employeeList.remove(employee);
+
+                // prevent admin from deleting themselves
+                if (employee.getUserType() != null && !employee.getUserType().equals("admin")) {
+                    UserDao userDao = new UserDao(v.getContext());
+                    userDao.delete(employee);
+                    userDao.close();
+                }
+                filter(""); // Refresh the filtered list
+            }, error -> {
+                Snackbar.make(v, "Error: " + error.getMessage(), Snackbar.LENGTH_LONG).show();
+            });
         });
     }
 
@@ -63,7 +78,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         } else {
             for (Employee employee : employeeList) {
                 if (employee.getFirstName().toLowerCase().contains(query.toLowerCase()) ||
-                    employee.getDepartment().toLowerCase().contains(query.toLowerCase())) {
+                        employee.getLastName().toLowerCase().contains(query.toLowerCase())) {
                     filteredEmployeeList.add(employee);
                 }
             }

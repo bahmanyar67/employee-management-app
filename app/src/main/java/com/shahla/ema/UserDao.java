@@ -84,9 +84,10 @@ public class UserDao {
                 String joiningDateStr = cursor.getString(cursor.getColumnIndexOrThrow("joining_date"));
                 if (joiningDateStr != null) {
                     user.setJoiningDate(LocalDate.parse(joiningDateStr));
-                } else {
-                    user.setJoiningDate(null);
                 }
+//                else {
+//                    user.setJoiningDate(null);
+//                }
                 user.setLeaves(cursor.getInt(cursor.getColumnIndexOrThrow("leaves")));
                 employees.add(user);
             } while (cursor.moveToNext());
@@ -95,11 +96,11 @@ public class UserDao {
         return employees;
     }
 
-    public User getEmployeeById(int id) {
+    public Employee getEmployeeById(int id) {
         Cursor cursor = db.query("users", null, "id = ?", new String[]{String.valueOf(id)}, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
-            User user = new User();
+            Employee user = new Employee();
             user.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
             user.setFirstName(cursor.getString(cursor.getColumnIndexOrThrow("first_name")));
             user.setLastName(cursor.getString(cursor.getColumnIndexOrThrow("last_name")));
@@ -110,6 +111,28 @@ public class UserDao {
             user.setUserType(cursor.getString(cursor.getColumnIndexOrThrow("user_type")));
             user.setJoiningDate(LocalDate.parse(cursor.getString(cursor.getColumnIndexOrThrow("joining_date"))));
             user.setLeaves(cursor.getInt(cursor.getColumnIndexOrThrow("leaves")));
+            cursor.close();
+            return user;
+        } else {
+            return null;
+        }
+    }
+
+    public User getUserById(int id) {
+        Cursor cursor = db.query("users", null, "id = ?", new String[]{String.valueOf(id)}, null, null, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            User user = new User();
+            user.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
+            user.setFirstName(cursor.getString(cursor.getColumnIndexOrThrow("first_name")));
+            user.setLastName(cursor.getString(cursor.getColumnIndexOrThrow("last_name")));
+            user.setEmail(cursor.getString(cursor.getColumnIndexOrThrow("email")));
+            user.setPassword(cursor.getString(cursor.getColumnIndexOrThrow("password")));
+            user.setDepartment(cursor.getString(cursor.getColumnIndexOrThrow("department")));
+            // user.setSalary(cursor.getDouble(cursor.getColumnIndexOrThrow("salary")));
+            user.setUserType(cursor.getString(cursor.getColumnIndexOrThrow("user_type")));
+            // user.setJoiningDate(LocalDate.parse(cursor.getString(cursor.getColumnIndexOrThrow("joining_date"))));
+            // user.setLeaves(cursor.getInt(cursor.getColumnIndexOrThrow("leaves")));
             cursor.close();
             return user;
         } else {
@@ -143,9 +166,10 @@ public class UserDao {
             String joiningDateStr = cursor.getString(cursor.getColumnIndexOrThrow("joining_date"));
             if (joiningDateStr != null) {
                 user.setJoiningDate(LocalDate.parse(joiningDateStr));
-            } else {
-                user.setJoiningDate(null);
             }
+//            else {
+//                user.setJoiningDate(null);
+//            }
             user.setLeaves(cursor.getInt(cursor.getColumnIndexOrThrow("leaves")));
             cursor.close();
             return user;

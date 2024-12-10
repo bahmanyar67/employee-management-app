@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -12,6 +13,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Pattern;
@@ -37,6 +40,11 @@ public class LoginActivity extends AppCompatActivity {
         emailEditText = findViewById(R.id.emailEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
         loginButton = findViewById(R.id.loginButton);
+
+
+        emailEditText.setText("admin@domain.test");
+        passwordEditText.setText("Shahla123!");
+
 
         userDao = new UserDao(this);
 
@@ -90,7 +98,7 @@ public class LoginActivity extends AppCompatActivity {
                 if (user != null && passwordMatch) {
                     // If login is successful, start the DashboardActivity
                     Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
-                    intent.putExtra("user", user);
+                    intent.putExtra("current_user_id", user.getId());
                     startActivity(intent);
                 } else {
                     // Show error message if email or password is incorrect

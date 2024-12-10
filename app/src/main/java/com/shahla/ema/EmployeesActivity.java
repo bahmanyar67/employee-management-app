@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.Snackbar;
 
 public class EmployeesActivity extends BaseActivity {
 
@@ -33,8 +34,18 @@ public class EmployeesActivity extends BaseActivity {
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        adapter = new EmployeeAdapter(userDao.getEmployees());
-        recyclerView.setAdapter(adapter);
+        ApiService apiService = new ApiService(this);
+
+        apiService.getAllEmployees(employees -> {
+            adapter = new EmployeeAdapter(employees);
+            recyclerView.setAdapter(adapter);
+        }, error -> {
+            Snackbar.make(findViewById(android.R.id.content), "Error: " + error.getMessage(), Snackbar.LENGTH_LONG).show();
+        });
+
+
+//        adapter = new EmployeeAdapter(userDao.getEmployees());
+//        recyclerView.setAdapter(adapter);
 
         MaterialButton addButton = findViewById(R.id.addNewEmployeeButton);
         addButton.setOnClickListener(v -> {
@@ -61,4 +72,5 @@ public class EmployeesActivity extends BaseActivity {
         });
 
     }
+
 }

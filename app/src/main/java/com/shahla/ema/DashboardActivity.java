@@ -29,11 +29,13 @@ public class DashboardActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Get the User object from the intent
-        User user = (User) getIntent().getSerializableExtra("user");
+
+        // Get the current user id and user object from the intent
+        int currentUserId = getIntent().getIntExtra("current_user_id", 0);
+        UserDao userDao = new UserDao(this);
+        User user = userDao.getUserById(currentUserId);
 
         // Check the user type and load the appropriate activity
-
         if (user.getUserType().equals("employee")) {
             setContentView(R.layout.activity_employee_dashboard);
         } else if (user.getUserType().equals("admin")) {
@@ -53,7 +55,7 @@ public class DashboardActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(DashboardActivity.this, MyAccountActivity.class);
-                    intent.putExtra("user", user.getId());
+                    intent.putExtra("current_user_id", user.getId());
                     startActivity(intent);
                 }
             });

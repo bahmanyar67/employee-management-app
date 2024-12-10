@@ -47,6 +47,8 @@ dependencies {
 
     // Password hashing
     implementation (libs.jbcrypt)
+    implementation(libs.volley)
+    implementation(libs.gson)
 
 
 

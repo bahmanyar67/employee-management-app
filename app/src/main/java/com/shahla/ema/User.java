@@ -1,16 +1,20 @@
 package com.shahla.ema;
 
+import com.google.gson.annotations.JsonAdapter;
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 import java.time.LocalDate;
-
 
 
 public class User implements Serializable {
 
     private int id;
 
+    @SerializedName("firstname")
     private String firstName;
 
+    @SerializedName("lastname")
     private String lastName;
     private String email;
     private String password;
@@ -19,12 +23,15 @@ public class User implements Serializable {
 
     private String userType;
 
+    @SerializedName("joiningdate")
+    @JsonAdapter(LocalDateAdapter.class)
     private LocalDate joiningDate;
 
     private Integer leaves;
 
     // No-arg constructor required by Room
-    public User() {}
+    public User() {
+    }
 
     public User(String firstName, String lastName, String email, String password, String department, Double salary, String userType, LocalDate joiningDate, Integer leaves) {
         this.id = 0;
@@ -109,7 +116,9 @@ public class User implements Serializable {
     }
 
     public void setJoiningDate(LocalDate joiningDate) {
-        this.joiningDate = joiningDate;
+        if (joiningDate != null) {
+            this.joiningDate = joiningDate;
+        }
     }
 
     public Integer getLeaves() {
