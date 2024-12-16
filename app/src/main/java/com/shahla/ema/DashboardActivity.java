@@ -11,18 +11,20 @@ import android.widget.Button;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.badge.ExperimentalBadgeUtils;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.card.MaterialCardView;
+import com.shahla.ema.databinding.ActivityAdminDashboardBinding;
+import com.shahla.ema.databinding.ActivityEmployeeDashboardBinding;
+import com.shahla.ema.databinding.ActivityRegisterBinding;
 
 
 public class DashboardActivity extends BaseActivity {
 
 
-    private Button manageEmployeesButton;
+    private ActivityAdminDashboardBinding adminBinding;
+    private ActivityEmployeeDashboardBinding employeeBinding;
+
     private Button myAccountButton;
     private Button myHolidayRequestsButton;
-
-    private MaterialButton holidayRequestsButton;
-
-    private BadgeDrawable holidayRequestsBadge;
 
     @OptIn(markerClass = ExperimentalBadgeUtils.class)
     @Override
@@ -43,11 +45,9 @@ public class DashboardActivity extends BaseActivity {
         }
 
         // Set up the toolbar
-        setupToolbar();
+
         if (user.getUserType().equals("employee")) {
-
-
-            setToolbarTitle( user.getFirstName() + " Dashboard");
+            setupToolbar(user.getFirstName() + "'s Dashboard");
 
             // get the user account
             myAccountButton = findViewById(R.id.myAccountButton);
@@ -65,26 +65,32 @@ public class DashboardActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(DashboardActivity.this, MyHolidayRequestsActivity.class);
-                    intent.putExtra("user", user.getId());
+                    intent.putExtra("current_user_id", user.getId());
                     startActivity(intent);
                 }
             });
 
         } else if (user.getUserType().equals("admin")) {
-            setToolbarTitle("Admin Dashboard");
+            adminBinding = ActivityAdminDashboardBinding.inflate(getLayoutInflater());
+            setContentView(adminBinding.getRoot());
+
+            setupToolbar("Admin Dashboard");
+
+            adminBinding.employeesCount.setText(String.valueOf(userDao.getEmployeesCount()));
+
 
             // Set up the manage employees button
-            manageEmployeesButton = findViewById(R.id.manageEmployeesButton);
-            manageEmployeesButton.setOnClickListener(new View.OnClickListener() {
+            adminBinding.employeesCard.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(DashboardActivity.this, EmployeesActivity.class);
                     startActivity(intent);
                 }
             });
+
+            // TODO: update the count of pending holiday requests
             // Set up the holiday requests button
-            holidayRequestsButton = findViewById(R.id.holidayRequestsButton);
-            holidayRequestsButton.setOnClickListener(new View.OnClickListener() {
+            adminBinding.holidayRequestsCard.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(DashboardActivity.this, HolidayRequestsActivity.class);

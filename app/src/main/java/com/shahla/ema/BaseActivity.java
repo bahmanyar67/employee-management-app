@@ -1,6 +1,7 @@
 package com.shahla.ema;
 
 import android.content.Intent;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,12 +16,17 @@ public class BaseActivity extends AppCompatActivity {
 
     protected UserDao userDao;
 
-    protected void setupToolbar() {
+    protected void setupToolbar(String title) {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayShowTitleEnabled(false); // Disable default title
+        }
+
+        TextView toolbarTitle = findViewById(R.id.toolbarTitle);
+        if (getSupportActionBar() != null) {
+            toolbarTitle.setText(title);
         }
 
         ImageView profileButton = findViewById(R.id.profileButton);
@@ -49,13 +55,6 @@ public class BaseActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
-    }
-
-    protected void setToolbarTitle(String title) {
-        TextView toolbarTitle = findViewById(R.id.toolbarTitle);
-        if (getSupportActionBar() != null) {
-            toolbarTitle.setText(title);
-        }
     }
 
     private void showProfileMenu(View view) {

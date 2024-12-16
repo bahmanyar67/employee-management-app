@@ -12,8 +12,7 @@ public class SettingsActivity extends BaseActivity {
         setContentView(R.layout.activity_settings);
 
         // Set up the toolbar
-        setupToolbar();
-        setToolbarTitle("Settings");
+        setupToolbar("Settings");
 
         SwitchCompat holidayNotificationSwitch = findViewById(R.id.holidayNotificationSwitch);
         SwitchCompat employeeNotificationSwitch = findViewById(R.id.employeeNotificationSwitch);
