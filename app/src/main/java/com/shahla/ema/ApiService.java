@@ -1,6 +1,7 @@
 package com.shahla.ema;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -19,6 +20,7 @@ import org.json.JSONObject;
 
 import java.lang.reflect.Type;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ApiService {
@@ -44,6 +46,22 @@ public class ApiService {
                     listener.onResponse(employees);
                 }, errorListener);
         requestQueue.add(request);
+    }
+
+    // getMyEmployees method should get an array of employees id as a parameter and only return those matching the id
+    public void getMyEmployees(int[] ids, Response.Listener<List<Employee>> listener, Response.ErrorListener errorListener) {
+        this.getAllEmployees(employees -> {
+            List<Employee> myEmployees = new ArrayList<>();
+            for (Employee employee : employees) {
+                for (int id : ids) {
+                    if (employee.getId() == id) {
+                        myEmployees.add(employee);
+                        break;
+                    }
+                }
+            }
+            listener.onResponse(myEmployees);
+        }, errorListener);
     }
 
     public void getEmployeeById(int id, Response.Listener<Employee> listener, Response.ErrorListener errorListener) {
@@ -83,4 +101,31 @@ public class ApiService {
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.DELETE, url, null, listener, errorListener);
         requestQueue.add(request);
     }
+
+    public void isEmailUnique(String email, Employee e, Response.Listener<Boolean> listener, Response.ErrorListener errorListener) {
+        getAllEmployees(employees -> {
+            // if the email is the same as the employee's current email, it is okay
+            if (e != null && e.getEmail().equals(email)) {
+                listener.onResponse(true);
+                return;
+            }
+
+            // if the email is assigned to another employee, it is not unique
+            boolean isUnique = employees.stream().noneMatch(item -> item.getEmail().equals(email));
+            listener.onResponse(isUnique);
+        }, errorListener);
+    }
+
+    public void getEmployeeIdByEmail(String email, Response.Listener<Integer> listener, Response.ErrorListener errorListener) {
+        getAllEmployees(employees -> {
+            int id = employees.stream()
+                    .filter(item -> item.getEmail().equals(email))
+                    .map(Employee::getId)
+                    .findFirst()
+                    .orElse(-1);
+            listener.onResponse(id);
+        }, errorListener);
+    }
+
+
 }
