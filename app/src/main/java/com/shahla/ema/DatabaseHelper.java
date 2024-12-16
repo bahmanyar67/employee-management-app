@@ -15,18 +15,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_USERS_TABLE = "CREATE TABLE users (" +
-                "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "first_name TEXT," +
-                "last_name TEXT," +
-                "email TEXT," +
-                "password TEXT," +
-                "department TEXT," +
-                "salary REAL," +
-                "user_type TEXT," +
-                "joining_date TEXT," +
-                "leaves INTEGER)";
-        db.execSQL(CREATE_USERS_TABLE);
+
+        // Create users table
+        createTable(db, "users", "id INTEGER PRIMARY KEY AUTOINCREMENT, first_name TEXT, last_name TEXT, email TEXT, password TEXT, department TEXT, salary REAL, user_type TEXT, joining_date TEXT, leaves INTEGER");
+
+
+        // Create Holiday Requests table
+        createTable(db, "holiday_requests", "id INTEGER PRIMARY KEY AUTOINCREMENT, user_id INTEGER, from_date TEXT, to_date TEXT, note TEXT, status TEXT, FOREIGN KEY(user_id) REFERENCES users(id)");
+
 
         // Insert default admin user
         String encryptedPassword = Utilities.hashPassword("Shahla123!");
@@ -39,4 +35,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS users");
         onCreate(db);
     }
+
+
+    private void createTable(SQLiteDatabase db, String tableName, String columns) {
+        String CREATE_TABLE = "CREATE TABLE " + tableName + " (" + columns + ")";
+        db.execSQL(CREATE_TABLE);
+    }
+
 }
