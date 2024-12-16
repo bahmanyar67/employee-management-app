@@ -59,7 +59,7 @@ public class MyHolidayRequestAdapter extends RecyclerView.Adapter<MyHolidayReque
             case WAITING:
             default:
                 cardColor = holder.itemView.getContext().getResources().getColor(R.color.white);
-                cardStrokeColor = holder.itemView.getContext().getResources().getColor(R.color.disabledButtonColor);
+                cardStrokeColor = holder.itemView.getContext().getResources().getColor(R.color.blueColor);
                 break;
         }
 

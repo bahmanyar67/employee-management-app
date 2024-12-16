@@ -10,6 +10,8 @@ import java.util.List;
 
 public class HolidayRequestsActivity extends BaseActivity {
 
+    protected HolidayRequestDao holidayRequestDao;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -17,59 +19,20 @@ public class HolidayRequestsActivity extends BaseActivity {
 
 
         userDao = new UserDao(this);
+        holidayRequestDao = new HolidayRequestDao(this);
 
         // Set up the toolbar
-        setupToolbar();
-        setToolbarTitle("Holiday Requests");
+        setupToolbar("Holiday Requests");
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        List<HolidayRequest> holidayRequestList = new ArrayList<>();
-        List<Employee> employeeList = userDao.getEmployees();
-
-        String[] notes = {"Sick leave", "Vacation", "Family reasons", "Personal reasons"};
-
-        // generate the list of holiday requests
-        for (int i = 0; i < 10; i++) {
-            // random status
-            HolidayRequest.Status status = HolidayRequest.Status.values()[(int) (Math.random() * HolidayRequest.Status.values().length)];
-
-            LocalDate fromDate = generateRandomDate();
-            LocalDate toDate = generateRandomDate(fromDate);
-
-            // random date
-            holidayRequestList.add(new HolidayRequest(employeeList.get(i),
-                    fromDate, toDate, notes[i % notes.length], status));
-
-        }
-
-        // show waiting requests first
-        holidayRequestList.sort((r1, r2) -> r1.getStatus() == HolidayRequest.Status.WAITING ? -1 : 1);
+        // Get all holiday requests from the database
+        List<HolidayRequest> holidayRequestList = holidayRequestDao.getHolidayRequests();
 
 
         HolidayRequestAdapter adapter = new HolidayRequestAdapter(holidayRequestList);
         recyclerView.setAdapter(adapter);
-    }
-
-
-    private LocalDate generateRandomDate() {
-        return generateRandomDate(null);
-    }
-    private LocalDate generateRandomDate(LocalDate previousDate) {
-        LocalDate lowerBound = LocalDate.of(2024, 11, 1);
-        LocalDate upperBound = LocalDate.of(2025, 5, 1);
-
-        if (previousDate != null) {
-            lowerBound = previousDate.plusDays(1);
-            upperBound = previousDate.plusDays(5);
-        }
-
-        long startEpochDay = lowerBound.toEpochDay();
-        long endEpochDay = upperBound.toEpochDay();
-
-        long randomDay = startEpochDay + (long) (Math.random() * (endEpochDay - startEpochDay));
-        return LocalDate.ofEpochDay(randomDay);
     }
 
 }

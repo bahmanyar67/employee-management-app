@@ -9,13 +9,17 @@ public class HolidayRequest {
         WAITING
     }
 
-    private User employee;
+    private Employee employee;
     private LocalDate fromDate;
     private LocalDate toDate;
     private String note;
     private Status status;
 
-    public HolidayRequest(User employee, LocalDate fromDate, LocalDate toDate, String note, Status status) {
+
+    public HolidayRequest() {
+    }
+
+    public HolidayRequest(Employee employee, LocalDate fromDate, LocalDate toDate, String note, Status status) {
         this.employee = employee;
         this.fromDate = fromDate;
         this.toDate = toDate;
@@ -23,20 +27,36 @@ public class HolidayRequest {
         this.status = status;
     }
 
-    public User getEmployee() {
+    public Employee getEmployee() {
         return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 
     public LocalDate getFromDate() {
         return fromDate;
     }
 
+    public void setFromDate(LocalDate fromDate) {
+        this.fromDate = fromDate;
+    }
+
     public LocalDate getToDate() {
         return toDate;
     }
 
+    public void setToDate(LocalDate toDate) {
+        this.toDate = toDate;
+    }
+
     public String getNote() {
         return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
     public Status getStatus() {

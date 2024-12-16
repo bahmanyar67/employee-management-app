@@ -28,13 +28,20 @@ public class NewHolidayRequestActivity extends BaseActivity {
     private Button submitButton;
     private Button dateRangeButton;
 
+    private Employee employee;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_holiday_request);
 
-        setupToolbar();
-        setToolbarTitle("New Holiday Request");
+        setupToolbar("New Holiday Request");
+
+        // get current user id from the intent and get the employee object from the database
+        int currentUserId = getIntent().getIntExtra("current_user_id", 0);
+        UserDao userDao = new UserDao(this);
+        employee = userDao.getEmployeeById(currentUserId);
+
 
         fromDateEditText = findViewById(R.id.fromDateEditText);
         toDateEditText = findViewById(R.id.toDateEditText);
@@ -65,8 +72,12 @@ public class NewHolidayRequestActivity extends BaseActivity {
                 LocalDate toDate = LocalDate.parse(toDateStr);
 
                 // Create a new HolidayRequest object
-                User user = (User) getIntent().getSerializableExtra("user");
-                HolidayRequest newRequest = new HolidayRequest(user, fromDate, toDate, note, HolidayRequest.Status.WAITING);
+                HolidayRequest newRequest = new HolidayRequest(employee, fromDate, toDate, note, HolidayRequest.Status.WAITING);
+
+                // Save the new holiday request to the database
+                HolidayRequestDao holidayRequestDao = new HolidayRequestDao(NewHolidayRequestActivity.this);
+                holidayRequestDao.insert(newRequest);
+                holidayRequestDao.close();
 
                 Toast.makeText(NewHolidayRequestActivity.this, "Request submitted", Toast.LENGTH_SHORT).show();
                 finish();
