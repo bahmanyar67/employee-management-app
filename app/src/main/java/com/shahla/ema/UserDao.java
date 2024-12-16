@@ -30,6 +30,9 @@ public class UserDao {
 
     public void insert(User user) {
         ContentValues values = new ContentValues();
+        if (user.getId() != 0) {
+            values.put("id", user.getId());
+        }
         values.put("first_name", user.getFirstName());
         values.put("last_name", user.getLastName());
         values.put("email", user.getEmail());
@@ -179,5 +182,39 @@ public class UserDao {
             }
             return null;
         }
+    }
+
+    public boolean isEmailUnique(String email, Employee employee) {
+        User user = this.findUserByEmail(email);
+        this.close();
+        return user == null || (employee != null && user.getId() == employee.getId());
+    }
+
+    public int getEmployeesCount() {
+        String countQuery = "SELECT * FROM users WHERE user_type = 'employee'";
+        Cursor cursor = db.rawQuery(countQuery, null);
+        int count = cursor.getCount();
+        cursor.close();
+        return count;
+    }
+
+    // get all employees ids
+    public List<Integer> getEmployeesIds() {
+        List<Integer> ids = new ArrayList<>();
+        Cursor cursor = db.query(
+                "users",
+                new String[]{"id"},
+                "user_type = ?", new String[]{"employee"},
+                null,
+                null,
+                null
+        );
+        if (cursor.moveToFirst()) {
+            do {
+                ids.add(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        return ids;
     }
 }

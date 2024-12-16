@@ -28,31 +28,49 @@ public class EmployeeActivity extends BaseActivity {
         binding = ActivityEmployeeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        // Get the Employee object from the intent
+        if (getIntent().hasExtra("employee")) {
+            employee = (Employee) getIntent().getSerializableExtra("employee");
+        } else {
+            employee = null;
+        }
 
         // Set up the toolbar
-        setupToolbar();
-        setToolbarTitle(employee != null ? "Employee Profile" : "New Employee");
-
-        // Get the Employee object from the intent
-        employee = (Employee) getIntent().getSerializableExtra("employee");
+        setupToolbar(employee != null ? "Employee Profile" : "New Employee");
 
         // Display the employee details if editing
         if (employee != null) {
             populateEmployeeDetails();
         }
 
+
         // Set up the save button to return to EmployeesActivity
         MaterialButton saveButton = findViewById(R.id.saveButton);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (validate()) {
-                    if (employee != null) {
-                        updateEmployee();
-                    } else {
-                        saveEmployee();
+                Utilities.validate(
+                        EmployeeActivity.this,
+                        binding.employeeFirstName,
+                        binding.employeeLastName,
+                        binding.employeeEmail,
+                        binding.employeePassword,
+                        null,
+                        binding.employeeDepartment,
+                        binding.annualSalary,
+                        binding.employmentDate,
+                        binding.employeeAllowedLeaves,
+                        employee
+                ).thenAccept(isValid -> {
+                    Log.d("VALIDATION", "isValid: " + isValid);
+                    if (isValid) {
+                        if (employee != null) {
+                            updateEmployee();
+                        } else {
+                            saveEmployee();
+                        }
                     }
-                }
+                });
             }
         });
     }
@@ -102,46 +120,6 @@ public class EmployeeActivity extends BaseActivity {
         }
     }
 
-    private boolean validate() {
-
-        boolean isValid = true;
-
-        isValid &= validateField(binding.employeeFirstName, "First Name is required");
-        isValid &= validateField(binding.employeeLastName, "Last Name is required");
-        isValid &= validateField(binding.employeeEmail, "Email is required");
-        if (employee == null) {
-            isValid &= validateField(binding.employeePassword, "Password is required");
-        }
-        isValid &= validateField(binding.employeeDepartment, "Department is required");
-        isValid &= validateField(binding.annualSalary, "Salary is required");
-        isValid &= validateField(binding.employmentDate, "Joining Date is required");
-        isValid &= validateField(binding.employeeAllowedLeaves, "Allowed Leaves is required");
-
-        if (!Utilities.isValidEmail(binding.employeeEmail.getText().toString())) {
-            binding.employeeEmail.setError("Invalid Email Address");
-            isValid = false;
-        }
-
-        if (!isEmailUnique(binding.employeeEmail.getText().toString())) {
-            binding.employeeEmail.setError("Email already exists");
-            isValid = false;
-        }
-
-        if (employee == null || !binding.employeePassword.getText().toString().isEmpty()) {
-            if (!Utilities.isValidPassword(binding.employeePassword.getText().toString())) {
-                binding.employeePassword.setError("Password is not secure");
-                isValid = false;
-            }
-        }
-
-        if (!Utilities.isValidDate(binding.employmentDate.getText().toString())) {
-            binding.employmentDate.setError("Invalid Date");
-            isValid = false;
-        }
-
-        return isValid;
-    }
-
     // store the employee details in the database
     private void saveEmployee() {
         String firstName = binding.employeeFirstName.getText().toString();
@@ -161,10 +139,17 @@ public class EmployeeActivity extends BaseActivity {
         ApiService apiService = new ApiService(this);
         apiService.addEmployee(employee, response -> {
             Log.d("API", "Employee added successfully");
-            UserDao userDao = new UserDao(this);
-            userDao.insert(employee);
-            userDao.close();
-            goBackToEmployeesActivity();
+            apiService.getEmployeeIdByEmail(email, id -> {
+                if (id > 0) {
+                    employee.setId(id);
+                }
+                UserDao userDao = new UserDao(this);
+                userDao.insert(employee);
+                userDao.close();
+                goBackToEmployeesActivity();
+            }, error -> {
+                Snackbar.make(binding.getRoot(), "Error: " + error.getMessage(), Snackbar.LENGTH_LONG).show();
+            });
         }, error -> {
             Snackbar.make(binding.getRoot(), "Error: " + error.getMessage(), Snackbar.LENGTH_LONG).show();
         });
@@ -205,14 +190,6 @@ public class EmployeeActivity extends BaseActivity {
             Snackbar.make(binding.getRoot(), "Error: " + error.getMessage(), Snackbar.LENGTH_LONG).show();
         });
     }
-
-    private boolean isEmailUnique(String email) {
-        UserDao userDao = new UserDao(this);
-        User user = userDao.findUserByEmail(email);
-        userDao.close();
-        return user == null || (employee != null && user.getId() == employee.getId());
-    }
-
 
     private boolean validateField(TextInputEditText field, String errorMessage) {
         String text = field.getText().toString().trim();

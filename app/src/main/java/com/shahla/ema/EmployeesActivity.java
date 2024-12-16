@@ -13,6 +13,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.List;
+
 public class EmployeesActivity extends BaseActivity {
 
     private UserDao userDao;
@@ -23,20 +25,20 @@ public class EmployeesActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_employees);
 
-
         userDao = new UserDao(this);
 
-
         // Set up the toolbar
-        setupToolbar();
-        setToolbarTitle("Employees List");
+        setupToolbar("Employees List");
 
         RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         ApiService apiService = new ApiService(this);
 
-        apiService.getAllEmployees(employees -> {
+
+        int[] employeesFromDB = userDao.getEmployees().stream().mapToInt(Employee::getId).toArray();
+
+        apiService.getMyEmployees(employeesFromDB, employees -> {
             adapter = new EmployeeAdapter(employees);
             recyclerView.setAdapter(adapter);
         }, error -> {

@@ -1,5 +1,6 @@
 package com.shahla.ema;
 
+import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.JsonAdapter;
 import com.google.gson.annotations.SerializedName;
 
@@ -17,6 +18,7 @@ public class User implements Serializable {
     @SerializedName("lastname")
     private String lastName;
     private String email;
+    @Expose(serialize = false)
     private String password;
     private String department;
     private Double salary;
