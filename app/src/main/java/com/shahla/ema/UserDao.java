@@ -45,7 +45,7 @@ public class UserDao {
         db.insert("users", null, values);
     }
 
-    public void update(User user) {
+    public void update(Employee user) {
         ContentValues values = new ContentValues();
         values.put("first_name", user.getFirstName());
         values.put("last_name", user.getLastName());

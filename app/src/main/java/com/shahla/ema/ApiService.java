@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ApiService {
-    private static final String BASE_URL = "http://10.224.41.11/comp2000";
+    private static final String BASE_URL = "http://10.0.2.2:5000";
     private RequestQueue requestQueue;
     private Gson gson;
 
