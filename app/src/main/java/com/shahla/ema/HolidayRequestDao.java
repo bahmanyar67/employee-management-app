@@ -46,11 +46,12 @@ public class HolidayRequestDao {
 
     public List<HolidayRequest> getHolidayRequests() {
         List<HolidayRequest> requests = new ArrayList<>();
-        Cursor cursor = db.query("holiday_requests", null, null, null, null, null, null);
+        Cursor cursor = db.query("holiday_requests", null, null, null, null, null, null );
 
         if (cursor.moveToFirst()) {
             do {
                 HolidayRequest request = new HolidayRequest();
+                request.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
 
                 int employeeId = cursor.getInt(cursor.getColumnIndexOrThrow("user_id"));
                 Employee employee = new UserDao(context).getEmployeeById(employeeId);
@@ -68,6 +69,15 @@ public class HolidayRequestDao {
         return requests;
     }
 
+    public int getWaitingHolidayRequestsCount() {
+        List<HolidayRequest> requests = new ArrayList<>();
+        Cursor cursor = db.query("holiday_requests", null, "status = ?",
+                new String[]{String.valueOf(HolidayRequest.Status.WAITING)}, null, null,
+                "from_date DESC");
+
+        return cursor.getCount();
+    }
+
     public List<HolidayRequest> getHolidayRequestsByEmployeeId(int employeeId) {
         List<HolidayRequest> requests = new ArrayList<>();
         Cursor cursor = db.query("holiday_requests", null, "user_id = ?",
@@ -80,7 +90,7 @@ public class HolidayRequestDao {
         if (cursor.moveToFirst()) {
             do {
                 HolidayRequest request = new HolidayRequest();
-
+                request.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
                 request.setEmployee(employee);
                 request.setFromDate(LocalDate.parse(cursor.getString(cursor.getColumnIndexOrThrow("from_date"))));
                 request.setToDate(LocalDate.parse(cursor.getString(cursor.getColumnIndexOrThrow("to_date"))));

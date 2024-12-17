@@ -1,10 +1,18 @@
 package com.shahla.ema;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.OptIn;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import android.widget.Button;
 
@@ -26,11 +34,9 @@ public class DashboardActivity extends BaseActivity {
     private Button myAccountButton;
     private Button myHolidayRequestsButton;
 
-    @OptIn(markerClass = ExperimentalBadgeUtils.class)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
         // Get the current user id and user object from the intent
         int currentUserId = getIntent().getIntExtra("current_user_id", 0);
@@ -74,10 +80,13 @@ public class DashboardActivity extends BaseActivity {
             adminBinding = ActivityAdminDashboardBinding.inflate(getLayoutInflater());
             setContentView(adminBinding.getRoot());
 
+            createNotificationChannel();
+
             setupToolbar("Admin Dashboard");
 
-            adminBinding.employeesCount.setText(String.valueOf(userDao.getEmployeesCount()));
+            HolidayRequestDao holidayRequestDao = new HolidayRequestDao(this);
 
+            adminBinding.employeesCount.setText(String.valueOf(userDao.getEmployeesCount()));
 
             // Set up the manage employees button
             adminBinding.employeesCard.setOnClickListener(new View.OnClickListener() {
@@ -88,7 +97,14 @@ public class DashboardActivity extends BaseActivity {
                 }
             });
 
-            // TODO: update the count of pending holiday requests
+
+            int waitingHolidayRequestsCount = holidayRequestDao.getWaitingHolidayRequestsCount();
+            adminBinding.holidayRequestsCount.setText(String.valueOf(waitingHolidayRequestsCount));
+
+            if (waitingHolidayRequestsCount > 0) {
+                sendNewHolidayRequestNotification();
+            }
+
             // Set up the holiday requests button
             adminBinding.holidayRequestsCard.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -104,5 +120,46 @@ public class DashboardActivity extends BaseActivity {
     @Override
     protected void setupBackButton() {
         // Implement this method to set up the back button
+    }
+
+    private boolean askForNotificationPermission() {
+        // Check and request POST_NOTIFICATIONS permission only for Android 13+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) { // API level 33
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this,
+                        new String[]{android.Manifest.permission.POST_NOTIFICATIONS},
+                        1 // Request code
+                );
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void createNotificationChannel() {
+        CharSequence name = "HolidayRequestChannel";
+        String description = "Channel for holiday request notifications";
+        int importance = NotificationManager.IMPORTANCE_DEFAULT;
+        NotificationChannel channel = new NotificationChannel("holidayRequestChannel", name, importance);
+        channel.setDescription(description);
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+        notificationManager.createNotificationChannel(channel);
+    }
+
+    private void sendNewHolidayRequestNotification() {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "holidayRequestChannel")
+                .setSmallIcon(R.drawable.ic_app) // Replace with your app's notification icon
+                .setContentTitle("New Holiday Request")
+                .setContentText("A new holiday request has been submitted.")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            if (!askForNotificationPermission()) {
+                return;
+            }
+        }
+        notificationManager.notify(1, builder.build());
     }
 }

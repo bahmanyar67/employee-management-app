@@ -4,8 +4,6 @@ import android.os.Bundle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 public class HolidayRequestsActivity extends BaseActivity {

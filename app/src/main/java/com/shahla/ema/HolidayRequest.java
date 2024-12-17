@@ -9,6 +9,7 @@ public class HolidayRequest {
         WAITING
     }
 
+    private int id;
     private Employee employee;
     private LocalDate fromDate;
     private LocalDate toDate;
@@ -25,6 +26,14 @@ public class HolidayRequest {
         this.toDate = toDate;
         this.note = note;
         this.status = status;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public Employee getEmployee() {
