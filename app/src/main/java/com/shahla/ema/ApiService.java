@@ -32,6 +32,7 @@ public class ApiService {
     public ApiService(Context context) {
         requestQueue = Volley.newRequestQueue(context);
         gson = new GsonBuilder()
+                .excludeFieldsWithoutExposeAnnotation()
                 .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
                 .create();
     }
@@ -49,6 +50,7 @@ public class ApiService {
     }
 
     // getMyEmployees method should get an array of employees id as a parameter and only return those matching the id
+    // API level is 28 so I can use toList() methods
     public void getMyEmployees(int[] ids, Response.Listener<List<Employee>> listener, Response.ErrorListener errorListener) {
         this.getAllEmployees(employees -> {
             List<Employee> myEmployees = new ArrayList<>();

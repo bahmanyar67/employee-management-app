@@ -41,7 +41,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
 
         holder.editButton.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), EmployeeActivity.class);
-            intent.putExtra("employee", employee);
+            intent.putExtra("employee_id", employee.getId());
             v.getContext().startActivity(intent);
         });
 

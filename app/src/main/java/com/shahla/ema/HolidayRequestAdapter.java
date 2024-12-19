@@ -97,8 +97,6 @@ public class HolidayRequestAdapter extends RecyclerView.Adapter<HolidayRequestAd
                 // different of from_date and to_date
                 int new_leaves = request.getToDate().getDayOfYear() - request.getFromDate().getDayOfYear();
                 employee.setLeaves(employee.getLeaves() - new_leaves);
-
-
                 // update the api
                 ApiService apiService = new ApiService(holder.itemView.getContext());
                 apiService.updateEmployee(employee.getId(), employee, response -> {

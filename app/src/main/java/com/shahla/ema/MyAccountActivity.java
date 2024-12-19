@@ -49,6 +49,7 @@ public class MyAccountActivity  extends BaseActivity{
         binding.annualSalary.setEnabled(false);
         binding.employmentDate.setEnabled(false);
         binding.employeeAllowedLeaves.setEnabled(false);
+        binding.employeeEmail.setEnabled(false);
 
 
         // Set up the save button to return to EmployeesActivity

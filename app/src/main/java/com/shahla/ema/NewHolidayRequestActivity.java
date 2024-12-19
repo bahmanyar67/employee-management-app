@@ -1,10 +1,13 @@
 package com.shahla.ema;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import java.time.temporal.ChronoUnit;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -63,6 +66,7 @@ public class NewHolidayRequestActivity extends BaseActivity {
                 String toDateStr = toDateEditText.getText().toString();
                 String note = noteEditText.getText().toString();
 
+                // Check if any of the fields are empty
                 if (fromDateStr.isEmpty() || toDateStr.isEmpty() || note.isEmpty()) {
                     Toast.makeText(NewHolidayRequestActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
                     return;
@@ -70,6 +74,15 @@ public class NewHolidayRequestActivity extends BaseActivity {
 
                 LocalDate fromDate = LocalDate.parse(fromDateStr);
                 LocalDate toDate = LocalDate.parse(toDateStr);
+
+                //here we are calculating the number of days between the two dates
+                //and checking if the employee has enough leaves
+                long days = ChronoUnit.DAYS.between(fromDate, toDate) + 1; // +1 to include both start and end dates
+                Log.d("NewHolidayRequest", "Days: " + days);
+                if (days > employee.getLeaves()) {
+                    Toast.makeText(NewHolidayRequestActivity.this, "You don't have enough leaves", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 // Create a new HolidayRequest object
                 HolidayRequest newRequest = new HolidayRequest(employee, fromDate, toDate, note, HolidayRequest.Status.WAITING);
@@ -79,8 +92,10 @@ public class NewHolidayRequestActivity extends BaseActivity {
                 holidayRequestDao.insert(newRequest);
                 holidayRequestDao.close();
 
+                // show a success message and go back to the MyHolidayRequestsActivity
                 Toast.makeText(NewHolidayRequestActivity.this, "Request submitted", Toast.LENGTH_SHORT).show();
-                finish();
+                Intent intent = new Intent(NewHolidayRequestActivity.this, MyHolidayRequestsActivity.class);
+                startActivity(intent);
             }
         });
     }

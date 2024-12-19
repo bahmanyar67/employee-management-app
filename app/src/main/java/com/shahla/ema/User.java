@@ -10,17 +10,23 @@ import java.time.LocalDate;
 
 public class User implements Serializable {
 
+    @Expose
     private int id;
 
     @SerializedName("firstname")
+    @Expose
     private String firstName;
 
     @SerializedName("lastname")
+    @Expose
     private String lastName;
+    @Expose
     private String email;
-    @Expose(serialize = false)
+    @Expose (serialize = false, deserialize = false)
     private String password;
+    @Expose
     private String department;
+    @Expose
     private Double salary;
 
     private String userType;

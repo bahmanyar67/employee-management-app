@@ -20,6 +20,8 @@ public class EmployeeActivity extends BaseActivity {
 
     private Employee employee;
 
+    private UserDao userDao;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,9 +30,11 @@ public class EmployeeActivity extends BaseActivity {
         binding = ActivityEmployeeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        userDao = new UserDao(this);
+
         // Get the Employee object from the intent
-        if (getIntent().hasExtra("employee")) {
-            employee = (Employee) getIntent().getSerializableExtra("employee");
+        if (getIntent().hasExtra("employee_id")) {
+            employee = userDao.getEmployeeById(getIntent().getIntExtra("employee_id", 0));
         } else {
             employee = null;
         }
@@ -143,7 +147,6 @@ public class EmployeeActivity extends BaseActivity {
                 if (id > 0) {
                     employee.setId(id);
                 }
-                UserDao userDao = new UserDao(this);
                 userDao.insert(employee);
                 userDao.close();
                 goBackToEmployeesActivity();
