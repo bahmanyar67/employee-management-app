@@ -1,27 +1,22 @@
 package com.shahla.ema;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import java.time.temporal.ChronoUnit;
-
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.util.Pair;
 
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.datepicker.DateValidatorPointForward;
-
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Calendar;
-import java.util.TimeZone;
-import androidx.core.util.Pair;
 
 public class NewHolidayRequestActivity extends BaseActivity {
 
@@ -52,6 +47,22 @@ public class NewHolidayRequestActivity extends BaseActivity {
         submitButton = findViewById(R.id.submitButton);
         dateRangeButton = findViewById(R.id.dateRangeButton);
 
+        // make fromDateEditText and toDateEditText read-only
+
+        fromDateEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDateRangePicker();
+            }
+        });
+
+        toDateEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDateRangePicker();
+            }
+        });
+
         dateRangeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,7 +77,6 @@ public class NewHolidayRequestActivity extends BaseActivity {
                 String toDateStr = toDateEditText.getText().toString();
                 String note = noteEditText.getText().toString();
 
-                // Check if any of the fields are empty
                 if (fromDateStr.isEmpty() || toDateStr.isEmpty() || note.isEmpty()) {
                     Toast.makeText(NewHolidayRequestActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
                     return;
@@ -75,10 +85,8 @@ public class NewHolidayRequestActivity extends BaseActivity {
                 LocalDate fromDate = LocalDate.parse(fromDateStr);
                 LocalDate toDate = LocalDate.parse(toDateStr);
 
-                //here we are calculating the number of days between the two dates
-                //and checking if the employee has enough leaves
+                // days should be less or equal to the number of leaves the employee has
                 long days = ChronoUnit.DAYS.between(fromDate, toDate) + 1; // +1 to include both start and end dates
-                Log.d("NewHolidayRequest", "Days: " + days);
                 if (days > employee.getLeaves()) {
                     Toast.makeText(NewHolidayRequestActivity.this, "You don't have enough leaves", Toast.LENGTH_SHORT).show();
                     return;
@@ -92,7 +100,6 @@ public class NewHolidayRequestActivity extends BaseActivity {
                 holidayRequestDao.insert(newRequest);
                 holidayRequestDao.close();
 
-                // show a success message and go back to the MyHolidayRequestsActivity
                 Toast.makeText(NewHolidayRequestActivity.this, "Request submitted", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(NewHolidayRequestActivity.this, MyHolidayRequestsActivity.class);
                 startActivity(intent);

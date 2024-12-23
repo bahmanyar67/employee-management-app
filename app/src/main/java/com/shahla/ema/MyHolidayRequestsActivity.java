@@ -32,8 +32,6 @@ public class MyHolidayRequestsActivity extends BaseActivity {
         UserDao userDao = new UserDao(this);
         employee = userDao.getEmployeeById(currentUserId);
 
-        Log.d("MyHolidayRequestsActivity", "Employee: " + currentUserId);
-
 
         // get employee's holiday requests from the database
         HolidayRequestDao holidayRequestDao = new HolidayRequestDao(this);
@@ -43,6 +41,8 @@ public class MyHolidayRequestsActivity extends BaseActivity {
         recyclerView.setAdapter(adapter); // display the list of holiday requests
 
 
+        // update holiday requests that has should_notify
+        holidayRequestDao.resetNotifiedHolidayRequests(employee.getId());
 
 
         // new request button
