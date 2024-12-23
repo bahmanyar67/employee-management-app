@@ -10,13 +10,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/dateRangeButton"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select Date"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        android:layout_margin="16dp"/>
+
     <EditText
         android:id="@+id/fromDateEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="From Date (YYYY-MM-DD)"
         android:inputType="date"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintTop_toBottomOf="@id/dateRangeButton"
         android:layout_margin="16dp"
         android:enabled="false"/>
 
@@ -30,25 +39,18 @@
         android:layout_margin="16dp"
         android:enabled="false"/>
 
-    <Button
-        android:id="@+id/dateRangeButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Select Date"
-        app:layout_constraintTop_toBottomOf="@id/toDateEditText"
-        android:layout_margin="16dp"/>
-
     <EditText
         android:id="@+id/noteEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Note"
         android:inputType="text"
-        app:layout_constraintTop_toBottomOf="@id/dateRangeButton"
+        app:layout_constraintTop_toBottomOf="@id/toDateEditText"
         android:layout_margin="16dp"/>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/submitButton"
+        style="@style/Widget.MaterialComponents.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Submit"
