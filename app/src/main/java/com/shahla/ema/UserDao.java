@@ -59,6 +59,12 @@ public class UserDao {
         db.update("users", values, "id = ?", new String[]{String.valueOf(user.getId())});
     }
 
+    public void updateNotification(User user) {
+        ContentValues values = new ContentValues();
+        values.put("notifications_enabled", user.isNotificationsEnabled() ? 1 : 0);
+        db.update("users", values, "id = ?", new String[]{String.valueOf(user.getId())});
+    }
+
     public void delete(Employee employee) {
         db.delete("users", "id = ?", new String[]{String.valueOf(employee.getId())});
     }
@@ -123,7 +129,7 @@ public class UserDao {
 
     public User getUserById(int id) {
         Cursor cursor = db.query("users", null, "id = ?", new String[]{String.valueOf(id)}, null, null, null);
-        if (cursor != null) {
+        if (cursor != null && cursor.getCount()>0) {
             cursor.moveToFirst();
             User user = new User();
             user.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
@@ -136,6 +142,7 @@ public class UserDao {
             user.setUserType(cursor.getString(cursor.getColumnIndexOrThrow("user_type")));
             // user.setJoiningDate(LocalDate.parse(cursor.getString(cursor.getColumnIndexOrThrow("joining_date"))));
             // user.setLeaves(cursor.getInt(cursor.getColumnIndexOrThrow("leaves")));
+            user.setNotificationsEnabled(cursor.getInt(cursor.getColumnIndexOrThrow("notifications_enabled")) == 1);
             cursor.close();
             return user;
         } else {

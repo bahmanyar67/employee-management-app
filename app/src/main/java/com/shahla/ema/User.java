@@ -35,7 +35,11 @@ public class User implements Serializable {
     @JsonAdapter(LocalDateAdapter.class)
     private LocalDate joiningDate;
 
+    @Expose
     private Integer leaves;
+
+
+    private boolean notificationsEnabled;
 
     // No-arg constructor required by Room
     public User() {
@@ -135,5 +139,13 @@ public class User implements Serializable {
 
     public void setLeaves(Integer leaves) {
         this.leaves = leaves;
+    }
+
+    public boolean isNotificationsEnabled() {
+        return notificationsEnabled;
+    }
+
+    public void setNotificationsEnabled(boolean notificationsEnabled) {
+        this.notificationsEnabled = notificationsEnabled;
     }
 }

@@ -13,8 +13,9 @@ import androidx.appcompat.widget.Toolbar;
 
 public class BaseActivity extends AppCompatActivity {
 
-
     protected UserDao userDao;
+
+    protected int currentUserId;
 
     protected void setupToolbar(String title) {
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -66,6 +67,7 @@ public class BaseActivity extends AppCompatActivity {
                 int itemId = item.getItemId();
                 if (itemId == R.id.settings) {
                     Intent intent = new Intent(BaseActivity.this, SettingsActivity.class);
+                    intent.putExtra("current_user_id", currentUserId);
                     startActivity(intent);
                     return true;
                 } else if (itemId == R.id.logout) {

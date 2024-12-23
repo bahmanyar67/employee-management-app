@@ -11,24 +11,14 @@
         android:layout_height="wrap_content" />
 
     <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/holidayNotificationSwitch"
+        android:id="@+id/notificationSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Notify on Holiday Request"
+        android:text="Receive Notifications "
         app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintVertical_bias="0.1"
-        tools:ignore="UseSwitchCompatOrMaterialXml" />
-    <androidx.appcompat.widget.SwitchCompat
-        android:id="@+id/employeeNotificationSwitch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Notify on Employee Update"
-        app:layout_constraintTop_toBottomOf="@id/holidayNotificationSwitch"
-        android:layout_marginTop="25dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         tools:ignore="UseSwitchCompatOrMaterialXml" />
 </androidx.constraintlayout.widget.ConstraintLayout>
