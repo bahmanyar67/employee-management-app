@@ -46,7 +46,8 @@ public class HolidayRequestDao {
 
     public List<HolidayRequest> getHolidayRequests() {
         List<HolidayRequest> requests = new ArrayList<>();
-        Cursor cursor = db.query("holiday_requests", null, null, null, null, null, null );
+        Cursor cursor = db.query("holiday_requests", null, null, null, null, null,
+                "created_at DESC");
 
         if (cursor.moveToFirst()) {
             do {
@@ -72,17 +73,46 @@ public class HolidayRequestDao {
     public int getWaitingHolidayRequestsCount() {
         List<HolidayRequest> requests = new ArrayList<>();
         Cursor cursor = db.query("holiday_requests", null, "status = ?",
-                new String[]{String.valueOf(HolidayRequest.Status.WAITING)}, null, null,
-                "from_date DESC");
+                new String[]{String.valueOf(HolidayRequest.Status.WAITING)}, null, null, null);
 
         return cursor.getCount();
     }
+
+    public int getMyWaitingHolidayRequestsCount(int employeeId) {
+        List<HolidayRequest> requests = new ArrayList<>();
+        Cursor cursor = db.query("holiday_requests", null,
+                "status = ? AND user_id = ?",
+                new String[]{String.valueOf(HolidayRequest.Status.WAITING), String.valueOf(employeeId)},
+                null, null, null);
+
+        return cursor.getCount();
+    }
+
+    public int getMyNotifiedHolidayRequestsCount(int employeeId) {
+        List<HolidayRequest> requests = new ArrayList<>();
+        Cursor cursor = db.query("holiday_requests", null,
+                "should_notify = ? AND user_id = ?",
+                new String[]{String.valueOf(1), String.valueOf(employeeId)},
+                null, null, null);
+
+        return cursor.getCount();
+    }
+
+    // set should_notify to 0 after notifying the user
+    public void resetNotifiedHolidayRequests(int employeeId) {
+        ContentValues values = new ContentValues();
+        values.put("should_notify", 0);
+
+        db.update("holiday_requests", values, "should_notify = ? AND user_id = ?",
+                new String[]{String.valueOf(1), String.valueOf(employeeId)});
+    }
+
 
     public List<HolidayRequest> getHolidayRequestsByEmployeeId(int employeeId) {
         List<HolidayRequest> requests = new ArrayList<>();
         Cursor cursor = db.query("holiday_requests", null, "user_id = ?",
                 new String[]{String.valueOf(employeeId)}, null, null,
-                "from_date DESC");
+                "created_at DESC");
 
         UserDao userDao = new UserDao(context);
         Employee employee = userDao.getEmployeeById(employeeId);
@@ -107,6 +137,7 @@ public class HolidayRequestDao {
     public void updateHolidayRequestStatus(int requestId, HolidayRequest.Status status) {
         ContentValues values = new ContentValues();
         values.put("status", status.name());
+        values.put("should_notify", 1);
 
         db.update("holiday_requests", values, "id = ?", new String[]{String.valueOf(requestId)});
     }

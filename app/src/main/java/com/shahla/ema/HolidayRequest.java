@@ -15,6 +15,7 @@ public class HolidayRequest {
     private LocalDate toDate;
     private String note;
     private Status status;
+    private boolean shouldNotify;
 
 
     public HolidayRequest() {
@@ -74,5 +75,13 @@ public class HolidayRequest {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public boolean isShouldNotify() {
+        return shouldNotify;
+    }
+
+    public void setShouldNotify(boolean shouldNotify) {
+        this.shouldNotify = shouldNotify;
     }
 }
