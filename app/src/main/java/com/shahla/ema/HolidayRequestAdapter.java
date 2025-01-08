@@ -18,8 +18,8 @@ import com.google.android.material.snackbar.Snackbar;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-public class HolidayRequestAdapter extends RecyclerView.Adapter<HolidayRequestAdapter.HolidayRequestViewHolder> {
-
+public class HolidayRequestAdapter extends RecyclerView.Adapter<HolidayRequestAdapter.HolidayRequestViewHolder>
+{
     HolidayRequestDao holidayRequestDao;
     private List<HolidayRequest> holidayRequestList;
 
@@ -30,12 +30,14 @@ public class HolidayRequestAdapter extends RecyclerView.Adapter<HolidayRequestAd
     @NonNull
     @Override
     public HolidayRequestViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.holiday_request_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.holiday_request_item, parent,
+                false);
         return new HolidayRequestViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull HolidayRequestViewHolder holder, @SuppressLint("RecyclerView") int position) {
+    public void onBindViewHolder(@NonNull HolidayRequestViewHolder holder, @SuppressLint("RecyclerView")
+    int position) {
         HolidayRequest request = holidayRequestList.get(position);
         String employeeName = request.getEmployee().getFirstName() + " " + request.getEmployee().getLastName();
         holder.employeeName.setText(employeeName);
@@ -54,8 +56,10 @@ public class HolidayRequestAdapter extends RecyclerView.Adapter<HolidayRequestAd
         // Set button background color based on enabled state
         int disabledColor = holder.itemView.getContext().getResources().getColor(R.color.disabledButtonColor);
 
-        holder.approveButton.setBackgroundColor(isWaiting ? holder.itemView.getContext().getResources().getColor(R.color.approveButtonColor) : disabledColor);
-        holder.declineButton.setBackgroundColor(isWaiting ? holder.itemView.getContext().getResources().getColor(R.color.declineButtonColor) : disabledColor);
+        holder.approveButton.setBackgroundColor(isWaiting ? holder.itemView.getContext().getResources()
+                .getColor(R.color.approveButtonColor) : disabledColor);
+        holder.declineButton.setBackgroundColor(isWaiting ? holder.itemView.getContext().getResources()
+                .getColor(R.color.declineButtonColor) : disabledColor);
 
         MaterialCardView cardView = (MaterialCardView) holder.itemView;
 

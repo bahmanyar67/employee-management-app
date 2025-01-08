@@ -32,7 +32,7 @@ public class MyAccountActivity  extends BaseActivity{
 
 
         // get current user id from the intent and get the employee object from the database
-        int currentUserId = getIntent().getIntExtra("current_user_id", 0);
+        currentUserId = getIntent().getIntExtra("current_user_id", 0);
         UserDao userDao = new UserDao(this);
         employee = userDao.getEmployeeById(currentUserId);
 

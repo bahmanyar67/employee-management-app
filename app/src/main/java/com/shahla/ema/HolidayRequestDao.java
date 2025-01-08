@@ -46,7 +46,8 @@ public class HolidayRequestDao {
 
     public List<HolidayRequest> getHolidayRequests() {
         List<HolidayRequest> requests = new ArrayList<>();
-        Cursor cursor = db.query("holiday_requests", null, null, null, null, null,
+        Cursor cursor = db.query("holiday_requests", null, null, null,
+                null, null,
                 "created_at DESC");
 
         if (cursor.moveToFirst()) {
@@ -61,7 +62,8 @@ public class HolidayRequestDao {
                 request.setFromDate(LocalDate.parse(cursor.getString(cursor.getColumnIndexOrThrow("from_date"))));
                 request.setToDate(LocalDate.parse(cursor.getString(cursor.getColumnIndexOrThrow("to_date"))));
                 request.setNote(cursor.getString(cursor.getColumnIndexOrThrow("note")));
-                request.setStatus(HolidayRequest.Status.valueOf(cursor.getString(cursor.getColumnIndexOrThrow("status"))));
+                request.setStatus(HolidayRequest.Status.valueOf(cursor.getString
+                        (cursor.getColumnIndexOrThrow("status"))));
 
                 requests.add(request);
             } while (cursor.moveToNext());

@@ -23,7 +23,8 @@ This is an Android application that allows admins to manage employees in a compa
 - Admins can view the details of an employee.
 - admin can view the profile of an employee.
 - ......
-
+- 
+# Employee Management System
 ## Usage
 1. Clone the repository.
 2. Open the project in Android Studio.
@@ -32,6 +33,6 @@ This is an Android application that allows admins to manage employees in a compa
    - `Username: admin@domain.test`
    - `Password: Shahla123!`
 5. Use below credentials to login as an employee:
-   - `Username: shahla@domain.test`
+   - `Username: shahla@gmail.com`
    - `Password: Shahla123!`
 6. Enjoy!

@@ -28,7 +28,7 @@ public class MyHolidayRequestsActivity extends BaseActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // get current user id from the intent and get the employee object from the database
-        int currentUserId = getIntent().getIntExtra("current_user_id", 0);
+        currentUserId = getIntent().getIntExtra("current_user_id", 0);
         UserDao userDao = new UserDao(this);
         employee = userDao.getEmployeeById(currentUserId);
 
@@ -37,9 +37,9 @@ public class MyHolidayRequestsActivity extends BaseActivity {
         HolidayRequestDao holidayRequestDao = new HolidayRequestDao(this);
         List<HolidayRequest> holidayRequestList = holidayRequestDao.getHolidayRequestsByEmployeeId(employee.getId());
 
+
         MyHolidayRequestAdapter adapter = new MyHolidayRequestAdapter(holidayRequestList);
         recyclerView.setAdapter(adapter); // display the list of holiday requests
-
 
         // update holiday requests that has should_notify
         holidayRequestDao.resetNotifiedHolidayRequests(employee.getId());
@@ -55,7 +55,6 @@ public class MyHolidayRequestsActivity extends BaseActivity {
                 startActivity(intent);
             }
         });
-
 
     }
 

@@ -136,9 +136,8 @@ public class EmployeeActivity extends BaseActivity {
         LocalDate joiningDate = LocalDate.parse(binding.employmentDate.getText().toString());
         int leaves = Integer.parseInt(binding.employeeAllowedLeaves.getText().toString());
 
-        // TODO: check if the employee is already in the database (Email should be unique)
-
-        Employee employee = new Employee(firstName, lastName, email, encryptedPassword, department, salary, joiningDate, leaves);
+        Employee employee = new Employee(firstName, lastName, email, encryptedPassword, department,
+                salary, joiningDate, leaves);
 
         ApiService apiService = new ApiService(this);
         apiService.addEmployee(employee, response -> {

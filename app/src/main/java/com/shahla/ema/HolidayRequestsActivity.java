@@ -15,7 +15,6 @@ public class HolidayRequestsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_holiday_requests);
 
-
         userDao = new UserDao(this);
         holidayRequestDao = new HolidayRequestDao(this);
 
@@ -27,8 +26,6 @@ public class HolidayRequestsActivity extends BaseActivity {
 
         // Get all holiday requests from the database
         List<HolidayRequest> holidayRequestList = holidayRequestDao.getHolidayRequests();
-
-
         HolidayRequestAdapter adapter = new HolidayRequestAdapter(holidayRequestList);
         recyclerView.setAdapter(adapter);
     }

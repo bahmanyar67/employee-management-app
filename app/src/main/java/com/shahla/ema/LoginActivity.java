@@ -39,9 +39,8 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.loginButton);
 
 
-        emailEditText.setText("admin@domain.test");
-        passwordEditText.setText("Shahla123!");
-
+//        emailEditText.setText("admin@domain.test");
+//        passwordEditText.setText("Shahla123!");
 
         userDao = new UserDao(this);
 
@@ -55,7 +54,8 @@ public class LoginActivity extends AppCompatActivity {
                     authenticateUser(email, password);
                 } else {
                     // Show error message if email or password format is incorrect
-                    Toast.makeText(LoginActivity.this, "Invalid email format or insecure password", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Invalid email format or insecure password",
+                            Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -99,7 +99,8 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(intent);
                 } else {
                     // Show error message if email or password is incorrect
-                    Toast.makeText(LoginActivity.this, "Invalid email or password", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Invalid email or password",
+                            Toast.LENGTH_SHORT).show();
                 }
             });
         });
@@ -113,7 +114,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private boolean validatePassword(String password) {
-        // Password should be at least 8 characters long and contain at least one digit, one uppercase letter, and one special character
+        // Password should be at least 8 characters long and contain at least one digit,
+        // one uppercase letter, and one special character
         String passwordPattern = "^(?=.*[0-9])(?=.*[A-Z])(?=.*[@#$%^&+=!]).{8,}$";
         return Pattern.matches(passwordPattern, password);
     }

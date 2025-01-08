@@ -17,7 +17,6 @@ import androidx.core.app.NotificationManagerCompat;
 import com.shahla.ema.databinding.ActivityAdminDashboardBinding;
 import com.shahla.ema.databinding.ActivityEmployeeDashboardBinding;
 
-
 public class DashboardActivity extends BaseActivity {
 
     @Override
@@ -39,7 +38,8 @@ public class DashboardActivity extends BaseActivity {
         HolidayRequestDao holidayRequestDao = new HolidayRequestDao(this);
 
         if (user.getUserType().equals("employee")) {
-            ActivityEmployeeDashboardBinding employeeBinding = ActivityEmployeeDashboardBinding.inflate(getLayoutInflater());
+            ActivityEmployeeDashboardBinding employeeBinding = ActivityEmployeeDashboardBinding.
+                    inflate(getLayoutInflater());
             setContentView(employeeBinding.getRoot());
 
             setupToolbar(user.getFirstName() + "'s Dashboard");
@@ -95,7 +95,6 @@ public class DashboardActivity extends BaseActivity {
                 }
             });
 
-
             int waitingHolidayRequestsCount = holidayRequestDao.getWaitingHolidayRequestsCount();
             adminBinding.holidayRequestsCount.setText(String.valueOf(waitingHolidayRequestsCount));
 
@@ -137,7 +136,6 @@ public class DashboardActivity extends BaseActivity {
         }
         return false;
     }
-
     private void createNotificationChannel() {
         CharSequence name = "HolidayRequestChannel";
         String description = "Channel for holiday request notifications";
@@ -153,9 +151,11 @@ public class DashboardActivity extends BaseActivity {
         Intent intent = new Intent(this, targetActivity);
         intent.putExtra("current_user_id", currentUserId);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "holidayRequestChannel")
+        NotificationCompat.Builder builder = new NotificationCompat.Builder
+                (this, "holidayRequestChannel")
                 .setSmallIcon(R.drawable.ic_app)
                 .setContentTitle(title)
                 .setContentText(message)
@@ -165,7 +165,8 @@ public class DashboardActivity extends BaseActivity {
 
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED) {
             if (!askForNotificationPermission()) {
                 return;
             }

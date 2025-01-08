@@ -67,7 +67,6 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
     private void saveEmployee() {
@@ -81,9 +80,10 @@ public class RegisterActivity extends AppCompatActivity {
         LocalDate joiningDate = LocalDate.now();
         int leaves = 30;  // New employees get 30 leaves by default
 
-        // TODO: check if the employee is already in the database (Email should be unique)
+        // check if the employee is already in the database (Email should be unique)
 
-        Employee employee = new Employee(firstName, lastName, email, encryptedPassword, department, salary, joiningDate, leaves);
+        Employee employee = new Employee(firstName, lastName, email, encryptedPassword, department,
+                salary, joiningDate, leaves);
 
         ApiService apiService = new ApiService(this);
         apiService.addEmployee(employee, response -> {
@@ -96,12 +96,15 @@ public class RegisterActivity extends AppCompatActivity {
                 userDao.insert(employee);
                 userDao.close();
                 goBackLogin();
-                Toast.makeText(RegisterActivity.this, "Registration successful", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegisterActivity.this, "Registration successful",
+                        Toast.LENGTH_SHORT).show();
             }, error -> {
-                Snackbar.make(binding.getRoot(), "Error: " + error.getMessage(), Snackbar.LENGTH_LONG).show();
+                Snackbar.make(binding.getRoot(), "Error: " + error.getMessage(), Snackbar
+                        .LENGTH_LONG).show();
             });
         }, error -> {
-            Toast.makeText(RegisterActivity.this, "There is a problem with registration", Toast.LENGTH_SHORT).show();
+            Toast.makeText(RegisterActivity.this, "There is a problem with registration",
+                    Toast.LENGTH_SHORT).show();
             Snackbar.make(binding.getRoot(), "Error: " + error.getMessage(), Snackbar.LENGTH_LONG).show();
         });
     }

@@ -26,12 +26,14 @@ public class MyHolidayRequestAdapter extends RecyclerView.Adapter<MyHolidayReque
     @NonNull
     @Override
     public HolidayRequestViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_holiday_request_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.my_holiday_request_item,
+                parent, false);
         return new HolidayRequestViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull HolidayRequestViewHolder holder, @SuppressLint("RecyclerView") int position) {
+    public void onBindViewHolder(@NonNull HolidayRequestViewHolder holder, @SuppressLint("RecyclerView")
+    int position) {
         HolidayRequest request = holidayRequestList.get(position);
 
         // date format should be like "Jan 1, 2025"

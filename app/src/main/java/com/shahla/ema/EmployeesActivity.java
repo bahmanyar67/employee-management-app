@@ -35,16 +35,15 @@ public class EmployeesActivity extends BaseActivity {
 
         ApiService apiService = new ApiService(this);
 
-
         int[] employeesFromDB = userDao.getEmployees().stream().mapToInt(Employee::getId).toArray();
 
         apiService.getMyEmployees(employeesFromDB, employees -> {
             adapter = new EmployeeAdapter(employees);
             recyclerView.setAdapter(adapter);
         }, error -> {
-            Snackbar.make(findViewById(android.R.id.content), "Error: " + error.getMessage(), Snackbar.LENGTH_LONG).show();
+            Snackbar.make(findViewById(android.R.id.content), "Error: " + error.getMessage(),
+                    Snackbar.LENGTH_LONG).show();
         });
-
 
 //        adapter = new EmployeeAdapter(userDao.getEmployees());
 //        recyclerView.setAdapter(adapter);

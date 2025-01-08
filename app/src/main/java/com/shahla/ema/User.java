@@ -45,7 +45,8 @@ public class User implements Serializable {
     public User() {
     }
 
-    public User(String firstName, String lastName, String email, String password, String department, Double salary, String userType, LocalDate joiningDate, Integer leaves) {
+    public User(String firstName, String lastName, String email, String password, String department,
+                Double salary, String userType, LocalDate joiningDate, Integer leaves) {
         this.id = 0;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -149,3 +150,5 @@ public class User implements Serializable {
         this.notificationsEnabled = notificationsEnabled;
     }
 }
+
+

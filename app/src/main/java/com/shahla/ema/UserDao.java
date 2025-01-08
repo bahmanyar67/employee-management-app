@@ -11,6 +11,7 @@ import java.util.List;
 
 public class UserDao {
 
+    // Database fields
     private SQLiteDatabase db;
     private DatabaseHelper dbHelper;
 
@@ -18,7 +19,7 @@ public class UserDao {
         dbHelper = new DatabaseHelper(context);
         db = dbHelper.getWritableDatabase();
     }
-
+    // close the database connection
     public void close() {
         if (db != null && db.isOpen()) {
             db.close();
@@ -27,8 +28,7 @@ public class UserDao {
             dbHelper.close();
         }
     }
-
-    public void insert(User user) {
+    public void insert(User user) {    // insert a user into the database
         ContentValues values = new ContentValues();
         if (user.getId() != 0) {
             values.put("id", user.getId());
@@ -44,7 +44,7 @@ public class UserDao {
         values.put("leaves", user.getLeaves());
         db.insert("users", null, values);
     }
-
+    // update a user in the database
     public void update(Employee user) {
         ContentValues values = new ContentValues();
         values.put("first_name", user.getFirstName());
@@ -59,16 +59,19 @@ public class UserDao {
         db.update("users", values, "id = ?", new String[]{String.valueOf(user.getId())});
     }
 
+    // update a user in the database
     public void updateNotification(User user) {
         ContentValues values = new ContentValues();
         values.put("notifications_enabled", user.isNotificationsEnabled() ? 1 : 0);
         db.update("users", values, "id = ?", new String[]{String.valueOf(user.getId())});
     }
 
+    // delete a user from the database
     public void delete(Employee employee) {
         db.delete("users", "id = ?", new String[]{String.valueOf(employee.getId())});
     }
 
+    // get all employees from the database
     public List<Employee> getEmployees() {
         List<Employee> employees = new ArrayList<>();
         Cursor cursor = db.query(
@@ -79,6 +82,8 @@ public class UserDao {
                 null,
                 null
         );
+
+        // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
                 Employee user = new Employee();
@@ -105,8 +110,10 @@ public class UserDao {
         return employees;
     }
 
+    // get all users from the database
     public Employee getEmployeeById(int id) {
-        Cursor cursor = db.query("users", null, "id = ?", new String[]{String.valueOf(id)}, null, null, null);
+        Cursor cursor = db.query("users", null, "id = ?",
+                new String[]{String.valueOf(id)}, null, null, null);
         if (cursor != null) {
             cursor.moveToFirst();
             Employee user = new Employee();
@@ -127,8 +134,10 @@ public class UserDao {
         }
     }
 
+    // get all users from the database
     public User getUserById(int id) {
-        Cursor cursor = db.query("users", null, "id = ?", new String[]{String.valueOf(id)}, null, null, null);
+        Cursor cursor = db.query("users", null, "id = ?", new String[]{String.valueOf(id)},
+                null, null, null);
         if (cursor != null && cursor.getCount()>0) {
             cursor.moveToFirst();
             User user = new User();
@@ -150,6 +159,7 @@ public class UserDao {
         }
     }
 
+    // get all users from the database
     public User findUserByEmail(String email) {
         if (db == null || !db.isOpen()) {
             throw new IllegalStateException("Database is not open");
@@ -163,6 +173,7 @@ public class UserDao {
                 null,
                 null
         );
+        // looping through all rows and adding to list
         if (cursor != null && cursor.moveToFirst()) {
             User user = new User();
             user.setId(cursor.getInt(cursor.getColumnIndexOrThrow("id")));
@@ -191,6 +202,7 @@ public class UserDao {
         }
     }
 
+    // check if the email is unique
     public boolean isEmailUnique(String email, Employee employee) {
         User user = this.findUserByEmail(email);
         this.close();

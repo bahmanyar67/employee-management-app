@@ -36,7 +36,7 @@ public class NewHolidayRequestActivity extends BaseActivity {
         setupToolbar("New Holiday Request");
 
         // get current user id from the intent and get the employee object from the database
-        int currentUserId = getIntent().getIntExtra("current_user_id", 0);
+        currentUserId = getIntent().getIntExtra("current_user_id", 0);
         UserDao userDao = new UserDao(this);
         employee = userDao.getEmployeeById(currentUserId);
 
@@ -78,7 +78,8 @@ public class NewHolidayRequestActivity extends BaseActivity {
                 String note = noteEditText.getText().toString();
 
                 if (fromDateStr.isEmpty() || toDateStr.isEmpty() || note.isEmpty()) {
-                    Toast.makeText(NewHolidayRequestActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NewHolidayRequestActivity.this, "Please fill in all fields",
+                            Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -88,7 +89,8 @@ public class NewHolidayRequestActivity extends BaseActivity {
                 // days should be less or equal to the number of leaves the employee has
                 long days = ChronoUnit.DAYS.between(fromDate, toDate) + 1; // +1 to include both start and end dates
                 if (days > employee.getLeaves()) {
-                    Toast.makeText(NewHolidayRequestActivity.this, "You don't have enough leaves", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(NewHolidayRequestActivity.this, "You don't have enough leaves",
+                            Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -102,6 +104,7 @@ public class NewHolidayRequestActivity extends BaseActivity {
 
                 Toast.makeText(NewHolidayRequestActivity.this, "Request submitted", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(NewHolidayRequestActivity.this, MyHolidayRequestsActivity.class);
+                intent.putExtra("current_user_id", employee.getId());
                 startActivity(intent);
             }
         });
@@ -122,8 +125,10 @@ public class NewHolidayRequestActivity extends BaseActivity {
             @Override
             public void onPositiveButtonClick(Pair<Long, Long> selection) {
                 if (selection != null) {
-                    LocalDate fromDate = Instant.ofEpochMilli(selection.first).atZone(ZoneId.systemDefault()).toLocalDate();
-                    LocalDate toDate = Instant.ofEpochMilli(selection.second).atZone(ZoneId.systemDefault()).toLocalDate();
+                    LocalDate fromDate = Instant.ofEpochMilli(selection.first).atZone(ZoneId.systemDefault())
+                            .toLocalDate();
+                    LocalDate toDate = Instant.ofEpochMilli(selection.second).atZone(ZoneId.systemDefault())
+                            .toLocalDate();
 
                     fromDateEditText.setText(fromDate.toString());
                     toDateEditText.setText(toDate.toString());

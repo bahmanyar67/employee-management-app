@@ -25,7 +25,6 @@ public class LocalDateAdapter extends TypeAdapter<LocalDate> {
         } catch (Exception e) {
             return LocalDate.parse(date, DateTimeFormatter.RFC_1123_DATE_TIME);
         }
-
 //        return in != null ? LocalDate.parse(in.nextString(), formatter) : null;
     }
 }
