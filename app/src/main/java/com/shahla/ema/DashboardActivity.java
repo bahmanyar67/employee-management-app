@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import androidx.core.app.ActivityCompat;
@@ -19,33 +18,34 @@ import com.shahla.ema.databinding.ActivityEmployeeDashboardBinding;
 
 public class DashboardActivity extends BaseActivity {
 
+
+    HolidayRequestDao holidayRequestDao;
+
+    ActivityEmployeeDashboardBinding employeeBinding;
+    ActivityAdminDashboardBinding adminBinding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Get the current user id and user object from the intent
-        currentUserId = getIntent().getIntExtra("current_user_id", 0);
-        UserDao userDao = new UserDao(this);
-        User user = userDao.getUserById(currentUserId);
-
         // Check the user type and load the appropriate activity
-        if (user.getUserType().equals("employee")) {
+        if (currentUser.getUserType().equals("employee")) {
             setContentView(R.layout.activity_employee_dashboard);
-        } else if (user.getUserType().equals("admin")) {
+        } else if (currentUser.getUserType().equals("admin")) {
             setContentView(R.layout.activity_admin_dashboard);
         }
 
-        HolidayRequestDao holidayRequestDao = new HolidayRequestDao(this);
+        holidayRequestDao = new HolidayRequestDao(this);
 
-        if (user.getUserType().equals("employee")) {
-            ActivityEmployeeDashboardBinding employeeBinding = ActivityEmployeeDashboardBinding.
+        if (currentUser.getUserType().equals("employee")) {
+             employeeBinding = ActivityEmployeeDashboardBinding.
                     inflate(getLayoutInflater());
             setContentView(employeeBinding.getRoot());
 
-            setupToolbar(user.getFirstName() + "'s Dashboard");
+            setupToolbar(currentUser.getFirstName() + "'s Dashboard");
 
             // update holiday requests count
-            int myWaitingHolidayRequestsCount = holidayRequestDao.getMyWaitingHolidayRequestsCount(user.getId());
+            int myWaitingHolidayRequestsCount = holidayRequestDao.getMyWaitingHolidayRequestsCount(currentUser.getId());
             employeeBinding.myHolidayRequestsCount.setText(String.valueOf(myWaitingHolidayRequestsCount));
 
             // get the user account
@@ -53,14 +53,14 @@ public class DashboardActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(DashboardActivity.this, MyAccountActivity.class);
-                    intent.putExtra("current_user_id", user.getId());
+                    intent.putExtra("current_user_id", currentUser.getId());
                     startActivity(intent);
                 }
             });
 
             // handle notification
-            int myNotifiedHolidayRequestsCount = holidayRequestDao.getMyNotifiedHolidayRequestsCount(user.getId());
-            if (myNotifiedHolidayRequestsCount > 0 && user.isNotificationsEnabled()) {
+            int myNotifiedHolidayRequestsCount = holidayRequestDao.getMyNotifiedHolidayRequestsCount(currentUser.getId());
+            if (myNotifiedHolidayRequestsCount > 0 && currentUser.isNotificationsEnabled()) {
                 sendNewHolidayRequestNotification(
                         "Holiday Request Changed",
                         "Your holiday request has been updated.",
@@ -71,13 +71,13 @@ public class DashboardActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(DashboardActivity.this, MyHolidayRequestsActivity.class);
-                    intent.putExtra("current_user_id", user.getId());
+                    intent.putExtra("current_user_id", currentUser.getId());
                     startActivity(intent);
                 }
             });
 
-        } else if (user.getUserType().equals("admin")) {
-            ActivityAdminDashboardBinding adminBinding = ActivityAdminDashboardBinding.inflate(getLayoutInflater());
+        } else if (currentUser.getUserType().equals("admin")) {
+            adminBinding = ActivityAdminDashboardBinding.inflate(getLayoutInflater());
             setContentView(adminBinding.getRoot());
 
             createNotificationChannel();
@@ -91,6 +91,7 @@ public class DashboardActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(DashboardActivity.this, EmployeesActivity.class);
+                    intent.putExtra("current_user_id", currentUser.getId());
                     startActivity(intent);
                 }
             });
@@ -98,7 +99,7 @@ public class DashboardActivity extends BaseActivity {
             int waitingHolidayRequestsCount = holidayRequestDao.getWaitingHolidayRequestsCount();
             adminBinding.holidayRequestsCount.setText(String.valueOf(waitingHolidayRequestsCount));
 
-            if (waitingHolidayRequestsCount > 0 && user.isNotificationsEnabled()) {
+            if (waitingHolidayRequestsCount > 0 && currentUser.isNotificationsEnabled()) {
                 sendNewHolidayRequestNotification(
                         "New Holiday Request",
                         "A new holiday request has been submitted.",
@@ -110,10 +111,44 @@ public class DashboardActivity extends BaseActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(DashboardActivity.this, HolidayRequestsActivity.class);
+                    intent.putExtra("current_user_id", currentUser.getId());
                     startActivity(intent);
                 }
             });
 
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateDashboardData();
+    }
+
+    private void updateDashboardData() {
+        if (currentUser.getUserType().equals("employee")) {
+            int myWaitingHolidayRequestsCount = holidayRequestDao.getMyWaitingHolidayRequestsCount(currentUser.getId());
+            employeeBinding.myHolidayRequestsCount.setText(String.valueOf(myWaitingHolidayRequestsCount));
+
+            int myNotifiedHolidayRequestsCount = holidayRequestDao.getMyNotifiedHolidayRequestsCount(currentUser.getId());
+            if (myNotifiedHolidayRequestsCount > 0 && currentUser.isNotificationsEnabled()) {
+                sendNewHolidayRequestNotification(
+                        "Holiday Request Changed",
+                        "Your holiday request has been updated.",
+                        MyHolidayRequestsActivity.class);
+            }
+        } else if (currentUser.getUserType().equals("admin")) {
+            adminBinding.employeesCount.setText(String.valueOf(userDao.getEmployeesCount()));
+
+            int waitingHolidayRequestsCount = holidayRequestDao.getWaitingHolidayRequestsCount();
+            adminBinding.holidayRequestsCount.setText(String.valueOf(waitingHolidayRequestsCount));
+
+            if (waitingHolidayRequestsCount > 0 && currentUser.isNotificationsEnabled()) {
+                sendNewHolidayRequestNotification(
+                        "New Holiday Request",
+                        "A new holiday request has been submitted.",
+                        HolidayRequestsActivity.class);
+            }
         }
     }
 
@@ -136,6 +171,7 @@ public class DashboardActivity extends BaseActivity {
         }
         return false;
     }
+
     private void createNotificationChannel() {
         CharSequence name = "HolidayRequestChannel";
         String description = "Channel for holiday request notifications";
@@ -145,6 +181,7 @@ public class DashboardActivity extends BaseActivity {
         NotificationManager notificationManager = getSystemService(NotificationManager.class);
         notificationManager.createNotificationChannel(channel);
     }
+
 
     private void sendNewHolidayRequestNotification(String title, String message, Class<?> targetActivity) {
 

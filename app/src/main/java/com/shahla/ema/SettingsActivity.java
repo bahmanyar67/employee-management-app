@@ -19,7 +19,7 @@ public class SettingsActivity extends BaseActivity {
         SwitchCompat notificationSwitch = findViewById(R.id.notificationSwitch);
 
         // Get the current user id from the intent
-        int currentUserId = getIntent().getIntExtra("current_user_id", 0);
+//        int currentUserId = getIntent().getIntExtra("current_user_id", 0);
 
         // Get the user object from the database
         UserDao userDao = new UserDao(this);

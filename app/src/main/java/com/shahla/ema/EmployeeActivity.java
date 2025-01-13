@@ -82,6 +82,7 @@ public class EmployeeActivity extends BaseActivity {
     private void goBackToEmployeesActivity() {
         Intent intent = new Intent(EmployeeActivity.this, EmployeesActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("current_user_id", getIntent().getIntExtra("current_user_id", 0));
         startActivity(intent);
         finish();
     }
@@ -115,8 +116,10 @@ public class EmployeeActivity extends BaseActivity {
 
         if (yearsPassed >= 1) {
             int percentageIncrease = yearsPassed * 5;
+            float newSalary = (float) (employee.getSalary() + (employee.getSalary() * percentageIncrease / 100));
             binding.salaryIncreaseNotification.setText(
-                    String.format("Increase Salary by %d%%", percentageIncrease)
+                    // show new salary with 2 decimal places
+                    String.format("Salary increased by %d%% (%d years)  New Salar: £%.2f", percentageIncrease, yearsPassed, newSalary)
             );
             binding.salaryIncreaseNotification.setVisibility(View.VISIBLE);
         } else {

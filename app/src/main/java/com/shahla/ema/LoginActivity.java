@@ -39,8 +39,8 @@ public class LoginActivity extends AppCompatActivity {
         loginButton = findViewById(R.id.loginButton);
 
 
-//        emailEditText.setText("admin@domain.test");
-//        passwordEditText.setText("Shahla123!");
+        emailEditText.setText("admin@domain.test");
+        passwordEditText.setText("Shahla123!");
 
         userDao = new UserDao(this);
 

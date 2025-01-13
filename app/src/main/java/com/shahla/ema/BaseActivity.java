@@ -1,7 +1,7 @@
 package com.shahla.ema;
 
 import android.content.Intent;
-import android.util.Log;
+import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -16,6 +16,17 @@ public class BaseActivity extends AppCompatActivity {
     protected UserDao userDao;
 
     protected int currentUserId;
+
+    protected User currentUser;
+
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        currentUserId = getIntent().getIntExtra("current_user_id", 0);
+        if (currentUserId != 0) {
+            userDao = new UserDao(this);
+            currentUser = userDao.getUserById(currentUserId);
+        }
+    }
 
     protected void setupToolbar(String title) {
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -70,6 +81,12 @@ public class BaseActivity extends AppCompatActivity {
                     intent.putExtra("current_user_id", currentUserId);
                     startActivity(intent);
                     return true;
+                } else if (itemId == R.id.dashboardMenuItem) {
+                    Intent intent = new Intent(BaseActivity.this, DashboardActivity.class);
+                    intent.putExtra("current_user_id", currentUserId);
+                    startActivity(intent);
+                    return true;
+
                 } else if (itemId == R.id.logout) {
                     Intent intent = new Intent(BaseActivity.this, LoginActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

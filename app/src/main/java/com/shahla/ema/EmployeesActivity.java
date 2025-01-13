@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
 import android.widget.EditText;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.List;
 
 public class EmployeesActivity extends BaseActivity {
 
@@ -38,7 +36,7 @@ public class EmployeesActivity extends BaseActivity {
         int[] employeesFromDB = userDao.getEmployees().stream().mapToInt(Employee::getId).toArray();
 
         apiService.getMyEmployees(employeesFromDB, employees -> {
-            adapter = new EmployeeAdapter(employees);
+            adapter = new EmployeeAdapter(employees, currentUser);
             recyclerView.setAdapter(adapter);
         }, error -> {
             Snackbar.make(findViewById(android.R.id.content), "Error: " + error.getMessage(),
@@ -51,6 +49,7 @@ public class EmployeesActivity extends BaseActivity {
         MaterialButton addButton = findViewById(R.id.addNewEmployeeButton);
         addButton.setOnClickListener(v -> {
             Intent intent = new Intent(EmployeesActivity.this, EmployeeActivity.class);
+            intent.putExtra("current_user_id", currentUser.getId());
             startActivity(intent);
         });
 
