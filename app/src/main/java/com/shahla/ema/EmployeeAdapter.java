@@ -1,5 +1,6 @@
 package com.shahla.ema;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,9 +22,12 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
     private List<Employee> employeeList;
     private List<Employee> filteredEmployeeList;
 
-    public EmployeeAdapter(List<Employee> employeeList) {
+    private User currentUser;
+
+    public EmployeeAdapter(List<Employee> employeeList, User currentUser) {
         this.employeeList = employeeList;
         this.filteredEmployeeList = new ArrayList<>(employeeList);
+        this.currentUser = currentUser;
     }
 
     @NonNull
@@ -43,27 +47,34 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         holder.editButton.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), EmployeeActivity.class);
             intent.putExtra("employee_id", employee.getId());
+            intent.putExtra("current_user_id", currentUser.getId());
             v.getContext().startActivity(intent);
         });
 
         holder.deleteButton.setOnClickListener(v -> {
+            new AlertDialog.Builder(v.getContext())
+                    .setTitle("Delete Employee")
+                    .setMessage("Are you sure you want to delete this employee?")
+                    .setPositiveButton(android.R.string.yes, (dialog, which) -> {
+                        ApiService apiService = new ApiService(v.getContext());
 
-            ApiService apiService = new ApiService(v.getContext());
+                        apiService.deleteEmployee(employee.getId(), response -> {
+                            Log.d("API", "Employee deleted successfully");
 
-            apiService.deleteEmployee(employee.getId(), response -> {
-                Log.d("API", "Employee deleted successfully");
-                employeeList.remove(employee);
-
-                // prevent admin from deleting themselves
-                if (employee.getUserType() != null && !employee.getUserType().equals("admin")) {
-                    UserDao userDao = new UserDao(v.getContext());
-                    userDao.delete(employee);
-                    userDao.close();
-                }
-                filter(""); // Refresh the filtered list
-            }, error -> {
-                Snackbar.make(v, "Error: " + error.getMessage(), Snackbar.LENGTH_LONG).show();
-            });
+                            // prevent admin from deleting themselves
+                            if (employee.getId() >= 100) {
+                                UserDao userDao = new UserDao(v.getContext());
+                                userDao.delete(employee);
+                                userDao.close();
+                            }
+                            employeeList.remove(employee);
+                            filter(""); // Refresh the filtered list
+                        }, error -> {
+                            Snackbar.make(v, "Error: " + error.getMessage(), Snackbar.LENGTH_LONG).show();
+                        });
+                    })
+                    .setNegativeButton(android.R.string.no, null)
+                    .show();
         });
     }
 
