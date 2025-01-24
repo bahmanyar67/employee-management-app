@@ -17,8 +17,9 @@ import java.lang.reflect.Type;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+// ApiService class that handles API requests using Volley
 public class ApiService {
-    private static final String BASE_URL = "http://10.0.2.2:5000";
+    private static final String BASE_URL = "http://10.224.41.11/comp2000";
     private RequestQueue requestQueue;
     private Gson gson;
     public ApiService(Context context) {
@@ -28,7 +29,6 @@ public class ApiService {
                 .registerTypeAdapter(LocalDate.class, new LocalDateAdapter())
                 .create();
     }
-
     public void getAllEmployees(Response.Listener<List<Employee>> listener, Response.ErrorListener
             errorListener) {
         String url = BASE_URL + "/employees";
